@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+{% block content %}
+<h1>Select Well Map for {{protocol}}</h1>
+
+{% if modFieldList != [] %}
+    <a href="{{url_for('Modify', filename=protocol)}}">
+        <div class='container text-right'>
+            <h3>Continue</h3>
+        </div>
+    </a>
+{% else %}
+    <a href="{{url_for('Confirm', filename=protocol)}}">
+        <div class='container text-right'>
+            <h3>Continue</h3>
+        </div>
+    </a>
+{% endif %}
+
+{% endblock content %}

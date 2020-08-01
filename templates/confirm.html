@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+{% block content %}
+<h1>Confirm {{protocol}}</h1>
+
+<h2>Metadata</h2>
+{% for metadata in metadataList %}
+    <div class='container'>
+        <p>{{metadata.field}}: {{metadata.value}}</p>
+    </div>
+{% endfor %}
+
+{% if modFieldList != [] %}
+    <h2>Modifiable Fields</h2>
+    {% for modField in modFieldList %}
+        <div class='container'>
+            <p>{{modField.field}}: {{modField.value}}</p>
+        </div>
+    {% endfor %}
+{% endif %}
+
+<h2>Pipettes</h2>
+{% for pipette in pipetteList %}
+    <div class='container'>
+        <p>Location: {{pipette.location}}, Pipette: {{pipette.item}}</p>
+    </div>
+{% endfor %}
+
+<h2>Labware</h2>
+{% for labware in labwareList %}
+    <div class='container'>
+        <p>Location: {{labware.location}}, Labware: {{labware.item}}</p>
+    </div>
+{% endfor %}
+
+<a href="">
+    <div class='container text-right'>
+        <h3>Continue</h3>
+    </div>
+</a>
+
+{% endblock content %}
