@@ -1,4 +1,5 @@
 import os, shutil
+from datetime import datetime
 
 # Checks if protocol folder exists, if not creates a folder then returns None. Otherwise, returns list of files
 def getProtocolList():
@@ -23,6 +24,8 @@ def makeTempFile(filename):
     if not os.path.exists('TemporaryFiles'):
         os.mkdir('TemporaryFiles')
     shutil.copyfile('ProtocolFiles/{}'.format(filename), 'TemporaryFiles/temp_{}'.format(filename))
+
+
 
 
 

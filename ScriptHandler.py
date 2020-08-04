@@ -116,6 +116,10 @@ def wellMapEnabled(metadata):
                 return True
     return False
 
+# Takes folder and filename, simulates protocol file and returns log
+def simulateScript(folder, filename):
+    return os.popen("opentrons_simulate.exe {}\{}".format(folder, filename)).read().splitlines()
+
 #-------------------- RTPCR Script Editing --------------------
 # Takes wellmap filename, returns dict (different ranges) of dict (values, cell color) 
 def readWellMap(wellmap):
@@ -132,8 +136,6 @@ def readWellMap(wellmap):
 
     return wellData
 
-    
-
 #Takes source (cell), destination (tuple of tuples), and returns array of bool if color matches
 def findColorMatch(source, destination):
     matches = []
@@ -146,7 +148,6 @@ def findColorMatch(source, destination):
                 temp_row.append(False)
         matches.append(temp_row)
     return matches
-
 
 # Takes source (cell), destination (tuple of tuples), and returns array of bool if value matches
 def findValueMatch(source, destination):

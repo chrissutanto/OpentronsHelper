@@ -1,5 +1,6 @@
 {% extends "layout.html" %}
 {% block content %}
+
 <h1>Confirm {{protocol}}</h1>
 
 <h2>Metadata</h2>
@@ -32,9 +33,15 @@
     </div>
 {% endfor %}
 
-<a href="">
+<a href="{{url_for('Simulate', filename=protocol)}}">
     <div class='container text-right'>
-        <h3>Continue</h3>
+        <h3>Simulate</h3>
+    </div>
+</a>
+
+<a href="{{url_for('FileReady', filename=protocol)}}">
+    <div class='container text-right'>
+        <h3>Confirm</h3>
     </div>
 </a>
 

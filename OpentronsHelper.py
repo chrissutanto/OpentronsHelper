@@ -1,7 +1,8 @@
-from flask import Flask, render_template, url_for, redirect
+from flask import Flask, render_template, url_for, redirect, send_file
 from FileManager import getProtocolList, getWellMapList, makeTempFile
-from ScriptHandler import findLabware, findPipettes, findMetadata, findModFields, editModFields, wellMapEnabled, editScriptRTPCR
-from Forms import modifyForm
+from ScriptHandler import findLabware, findPipettes, findMetadata, findModFields, editModFields, wellMapEnabled, editScriptRTPCR, simulateScript
+from Forms import modifyForm, historyForm
+from datetime import datetime
 import os
 
 app = Flask(__name__)
@@ -66,6 +67,30 @@ def Confirm(filename):
     modFields = findModFields(folder, temp_filename)
     return render_template('confirm.html', protocol=filename, labwareList=labware, pipetteList=pipettes, metadataList = metadata, modFieldList=modFields)
 
+@app.route('/Simulate/<filename>')
+def Simulate(filename):
+    temp_filename = 'temp_' + filename
+    folder = "TemporaryFiles"
+    simulationLog = simulateScript(folder, temp_filename)
+    return render_template('simulate.html', simulationLog=simulationLog, filename=filename)
+
+@app.route('/FileReady/<filename>')
+def FileReady(filename):
+    return render_template('file_ready.html', filename=filename)
+
+@app.route('/ReturnFile/<filename>')
+def ReturnFile(filename):
+    temp_filename = 'temp_' + filename
+    return send_file('TemporaryFiles/{}'.format(temp_filename), as_attachment=True, cache_timeout=-1)
+
+@app.route('/SaveHistory/<filename>', methods=('GET', 'POST'))
+def SaveHistory(filename):
+    form = historyForm()
+    if form.validate_on_submit():
+        print(form.email.data)
+        print(form.description.data)
+        return redirect(url_for('home'))
+    return render_template('save_history.html', filename=filename, form=form)
 
 if __name__== '__main__':
     app.run(debug=True)

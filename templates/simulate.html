@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<h1>Simulate {{filename}}</h1>
+
+{% for line in simulationLog %}
+    <p>{{ line |replace("\t", "&nbsp;"|safe*8)}}</p>
+{% endfor %}
+
+<a href="{{url_for('Confirm', filename=filename)}}">
+    <div class='container text-right'>
+        <h3>Continue</h3>
+    </div>
+</a>
+
+{% endblock content %}

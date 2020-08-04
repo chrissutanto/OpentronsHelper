@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<h1>{{filename}} Ready</h1>
+
+<div class='container'>
+    <p>Click the "Download" button to retrieve the file.</p>
+    <p>Drag and drop the downloaded file into the Opentrons app.</p>
+    <p>Follow the instructions in the app, and click "Save History" when complete.</p>
+</div>
+
+<a href="{{url_for('ReturnFile', filename=filename)}}">
+    <div class='container text-right'>
+        <h3>Download</h3>
+    </div>
+</a>
+
+<a href="{{url_for('SaveHistory', filename=filename)}}">
+    <div class='container text-right'>
+        <h3>Save History</h3>
+    </div>
+</a>
+
+{% endblock content %}
