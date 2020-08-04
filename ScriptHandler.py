@@ -1,8 +1,9 @@
 import re, os
+from openpyxl import load_workbook
 
 # Takes filename, returns lines of script
-def getLines(filename, folder):
-    file = open('{}/{}'.format(filename, folder))
+def getLines(folder, filename):
+    file = open('{}/{}'.format(folder, filename))
     lines = file.readlines()
     return lines
 
@@ -114,3 +115,129 @@ def wellMapEnabled(metadata):
             if item['value'].lower() == "true":
                 return True
     return False
+
+#-------------------- RTPCR Script Editing --------------------
+# Takes wellmap filename, returns dict (different ranges) of dict (values, cell color) 
+def readWellMap(wellmap):
+    path = 'WellMaps/{}'.format(wellmap)
+    workbook = load_workbook(path)
+    sheet = workbook.active
+
+    destination = sheet['B5:E12']
+    source_1 = sheet['H5:M8']
+    source_2 = sheet['H12:S19']
+
+    wellData = {'destination': destination, 'source_1': source_1, 'source_2': source_2}
+    # print(sheet['B1'].value)
+
+    return wellData
+
+    
+
+#Takes source (cell), destination (tuple of tuples), and returns array of bool if color matches
+def findColorMatch(source, destination):
+    matches = []
+    for row in destination:
+        temp_row = []
+        for cell in row:
+            if cell.fill.start_color.index == source.fill.start_color.index and source.fill.start_color.index != '00000000':
+                temp_row.append(True)
+            else:
+                temp_row.append(False)
+        matches.append(temp_row)
+    return matches
+
+
+# Takes source (cell), destination (tuple of tuples), and returns array of bool if value matches
+def findValueMatch(source, destination):
+    matches = []
+    for row in destination:
+        temp_row = []
+        for cell in row:
+            if cell.value == source.value and source.value != None:
+                temp_row.append(True)
+            else:
+                temp_row.append(False)
+        matches.append(temp_row)
+    return matches
+
+# Clears all lines in protocol file after "# commands"
+def clearCommands(folder, filename):
+    lines = getLines(folder, filename)
+    print('{}/{}'.format(folder, filename))
+    for i in range(len(lines)):
+        if "# commands" in lines[i]:
+            protocol_file = open("{}/{}".format(folder, filename), "w")
+            lines = lines[:i+1]
+            protocol_file.writelines(lines)
+            protocol_file.close()
+            break
+
+# Sets up dictionary of destination wells in protocol file
+def writeSetup(folder, filename):
+    command = "    letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']" + "\n" + "    d = {}" + "\n" + "    for letter in letters:" + "\n" + "        for i in range(1, 13):" + "\n" + "            d[letter + str(i)] = destination.wells_by_name()[letter + str(i)]"
+    with open("{}/{}".format(folder, filename), 'a') as file:
+        file.write(command)
+    return None
+
+# Takes source title, source location, and 2D array of matches, returns string of appropriate command
+def generateCommand(source_title, row_idx, col_idx, matches):
+    letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
+    command = ''
+    destinations = ''
+    match = False
+
+    source_location = letters[row_idx] + str(col_idx + 1)
+
+    if source_title == 'source_1':
+        volume = 'source_1_volume'
+    elif source_title == 'source_2':
+        volume = 'source_2_volume'
+
+    row_idx = 0
+    for row in matches:
+        col_idx = 0
+        for cell in row:
+            if cell:
+                match = True
+                for i in range(3):
+                    destinations = destinations + "d['" + letters[row_idx] + str(col_idx * 3 + i + 1) + "'], "
+            col_idx = col_idx + 1
+        row_idx = row_idx + 1
+    
+    if match:
+        command =  "\n" + "    " + 'single_pipette.distribute(' + volume + ', ' + source_title + ".wells_by_name()['" + source_location + "'], [" + destinations[:-2] + '])'
+    return command
+
+# Takes filename and command string, writes string onto file
+def writeToScript(folder, filename, command):
+    with open("{}/{}".format(folder, filename), 'a') as file:
+        file.write(command)
+    return None
+
+# Takes protocol and well map filenames, edits protocol file with appropriate code
+def editScriptRTPCR(folder, filename, wellmap):
+    wellData = readWellMap(wellmap)
+
+    source_1 = wellData['source_1']
+    source_2 = wellData['source_2']
+    sources = {'source_1': source_1, 'source_2': source_2}
+    destination = wellData['destination']
+
+    clearCommands(folder, filename)
+    writeSetup(folder, filename)
+
+    for source in sources:
+        row_idx = 0
+        for row in sources[source]:
+            col_idx = 0
+            for cell in row:
+                if source == 'source_1':
+                    matches = findColorMatch(cell, destination)
+                elif source == 'source_2':
+                    matches = findValueMatch(cell, destination)
+                command = generateCommand(source, row_idx, col_idx, matches)
+                writeToScript(folder, filename, command)
+                col_idx = col_idx + 1
+            row_idx = row_idx + 1
+    return None

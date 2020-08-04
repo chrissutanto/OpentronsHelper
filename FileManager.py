@@ -9,6 +9,15 @@ def getProtocolList():
         protocolList = []
     return protocolList
 
+# Checks if well map folder exists, if not creates a folder then returns None. Otherwise, returns list of well map files
+def getWellMapList():
+    if os.path.exists('WellMaps'):
+        wellMapList = os.listdir('WellMaps')
+    else:
+        os.mkdir('WellMaps')
+        wellMapList = []
+    return wellMapList
+
 # Takes filename and duplicates it into temporary file folder (creates one if does not exist)
 def makeTempFile(filename):
     if not os.path.exists('TemporaryFiles'):

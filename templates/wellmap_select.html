@@ -2,6 +2,18 @@
 {% block content %}
 <h1>Select Well Map for {{protocol}}</h1>
 
+{% if wellMapList == [] %}
+    <p>No well map files found, please add to {{directory}}\WellMaps</p>
+{% endif %}
+
+{% for wellMap in wellMapList %}
+    <a href="{{url_for('ApplyWellMap', filename=protocol, wellmap=wellMap)}}">
+        <div class='container'>
+            <h3>{{wellMap}}</h3>
+        </div>
+    </a>
+{% endfor %}
+
 {% if modFieldList != [] %}
     <a href="{{url_for('Modify', filename=protocol)}}">
         <div class='container text-right'>

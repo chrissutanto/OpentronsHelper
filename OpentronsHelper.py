@@ -1,6 +1,6 @@
 from flask import Flask, render_template, url_for, redirect
-from FileManager import getProtocolList, makeTempFile
-from ScriptHandler import findLabware, findPipettes, findMetadata, findModFields, editModFields, wellMapEnabled
+from FileManager import getProtocolList, getWellMapList, makeTempFile
+from ScriptHandler import findLabware, findPipettes, findMetadata, findModFields, editModFields, wellMapEnabled, editScriptRTPCR
 from Forms import modifyForm
 import os
 
@@ -17,6 +17,21 @@ def ProtocolScripts():
     directory = os.getcwd()
     return render_template('protocol_scripts.html', protocolList=protocolList, directory=directory)
 
+@app.route('/WellMapSelect/<filename>')
+def WellMapSelect(filename):
+    wellMapList = getWellMapList()
+    directory = os.getcwd()
+    return render_template('wellmap_select.html', protocol=filename, wellMapList=wellMapList, directory=directory)
+
+@app.route('/ApplyWellMap/<filename>/<wellmap>')
+def ApplyWellMap(filename, wellmap):
+    folder = "TemporaryFiles"
+    temp_filename = 'temp_' + filename
+    # apply well map
+    editScriptRTPCR(folder, temp_filename, wellmap)
+    # if no modfields, redirect to confirm
+    return redirect(url_for('Confirm', filename=filename))
+
 @app.route('/Protocol/<filename>')
 def Protocol(filename):
     folder = "ProtocolFiles"
@@ -28,7 +43,7 @@ def Protocol(filename):
     wellMap = wellMapEnabled(metadata)
     return render_template('protocol.html', protocol=filename, labwareList=labware, pipetteList=pipettes, metadataList=metadata, modFieldList=modFields, wellMapEnabled=wellMap)
 
-@app.route('/Protocol/<filename>/modify', methods=['post', 'get'])
+@app.route('/Modify/<filename>', methods=['post', 'get'])
 def Modify(filename):
     folder = "ProtocolFiles"
     modFields = findModFields(folder, filename)
@@ -41,7 +56,7 @@ def Modify(filename):
         return redirect(url_for('Confirm', filename=filename))
     return render_template('modify.html', protocol=filename, form=form, modFieldList=modFields)
 
-@app.route('/Protocol/<filename>/confirm')
+@app.route('/Confirm/<filename>')
 def Confirm(filename):
     temp_filename = 'temp_' + filename
     folder = "TemporaryFiles"
@@ -51,11 +66,6 @@ def Confirm(filename):
     modFields = findModFields(folder, temp_filename)
     return render_template('confirm.html', protocol=filename, labwareList=labware, pipetteList=pipettes, metadataList = metadata, modFieldList=modFields)
 
-@app.route('/Protocol/<filename>/WellMapSelect')
-def WellMapSelect(filename):
-    folder = "ProtocolFiles"
-    modFields = findModFields(folder, filename)
-    return render_template('wellmapselect.html', protocol=filename, modFieldList=modFields)
 
 if __name__== '__main__':
     app.run(debug=True)
