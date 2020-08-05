@@ -1,5 +1,6 @@
 import re, os
 from openpyxl import load_workbook
+from subprocess import Popen, PIPE
 
 # Takes filename, returns lines of script
 def getLines(folder, filename):
@@ -87,9 +88,21 @@ def findModFields(folder, filename):
                 i = i+1
     return fields
 
+# Takes filename, returns linked well map filename (returns none if none)
+def findWellmap(filename):
+    temp_filename = "temp_" + filename
+    lines = getLines("TemporaryFiles", temp_filename)
+    for line in lines:
+        if "# wellmap" in line:
+            wellmap = line[24:-3]
+            return wellmap
+    return None
+
+
 # Takes list of tuples representing user input, updates script modfields
 def editModFields(filename, user_input):
-    lines = getLines("ProtocolFiles", filename)
+    temp_filename = "temp_" + filename
+    lines = getLines("TemporaryFiles", temp_filename)
     input_no = 0
     for i in range(len(lines)):
         if "# modify" in lines[i]:
@@ -118,7 +131,18 @@ def wellMapEnabled(metadata):
 
 # Takes folder and filename, simulates protocol file and returns log
 def simulateScript(folder, filename):
-    return os.popen("opentrons_simulate.exe {}\{}".format(folder, filename)).read().splitlines()
+    # command = os.popen(r"opentrons_simulate.exe {}\{}".format(folder, filename)).read().splitlines()
+    # return command
+
+    p = Popen("opentrons_simulate.exe {}\{}".format(folder, filename), shell=True, stdin=PIPE, stdout=PIPE, stderr=PIPE, close_fds=True, text=True, universal_newlines=True)
+    out = p.communicate()[0]
+    err = p.communicate()[1]
+    error = False
+
+    if p.returncode != 0: 
+        error = True
+        return [error, err]
+    return [error, out]
 
 #-------------------- RTPCR Script Editing --------------------
 # Takes wellmap filename, returns dict (different ranges) of dict (values, cell color) 
@@ -165,7 +189,6 @@ def findValueMatch(source, destination):
 # Clears all lines in protocol file after "# commands"
 def clearCommands(folder, filename):
     lines = getLines(folder, filename)
-    print('{}/{}'.format(folder, filename))
     for i in range(len(lines)):
         if "# commands" in lines[i]:
             protocol_file = open("{}/{}".format(folder, filename), "w")
@@ -174,8 +197,11 @@ def clearCommands(folder, filename):
             protocol_file.close()
             break
 
-# Sets up dictionary of destination wells in protocol file
-def writeSetup(folder, filename):
+# Sets up dictionary of destination wells in protocol file, also writes wellmap filename
+def writeSetup(folder, filename, wellmap):
+    with open("{}/{}".format(folder, filename), 'a') as file:
+        file.write("    # wellmap filename: {} \n".format(wellmap))
+
     command = "    letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']" + "\n" + "    d = {}" + "\n" + "    for letter in letters:" + "\n" + "        for i in range(1, 13):" + "\n" + "            d[letter + str(i)] = destination.wells_by_name()[letter + str(i)]"
     with open("{}/{}".format(folder, filename), 'a') as file:
         file.write(command)
@@ -226,7 +252,7 @@ def editScriptRTPCR(folder, filename, wellmap):
     destination = wellData['destination']
 
     clearCommands(folder, filename)
-    writeSetup(folder, filename)
+    writeSetup(folder, filename, wellmap)
 
     for source in sources:
         row_idx = 0
@@ -241,4 +267,6 @@ def editScriptRTPCR(folder, filename, wellmap):
                 writeToScript(folder, filename, command)
                 col_idx = col_idx + 1
             row_idx = row_idx + 1
+    
+
     return None

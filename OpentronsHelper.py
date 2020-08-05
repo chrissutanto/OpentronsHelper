@@ -1,5 +1,5 @@
 from flask import Flask, render_template, url_for, redirect, send_file
-from FileManager import getProtocolList, getWellMapList, makeTempFile
+from FileManager import getProtocolList, getWellMapList, makeTempFile, saveHistory
 from ScriptHandler import findLabware, findPipettes, findMetadata, findModFields, editModFields, wellMapEnabled, editScriptRTPCR, simulateScript
 from Forms import modifyForm, historyForm
 from datetime import datetime
@@ -28,9 +28,10 @@ def WellMapSelect(filename):
 def ApplyWellMap(filename, wellmap):
     folder = "TemporaryFiles"
     temp_filename = 'temp_' + filename
-    # apply well map
     editScriptRTPCR(folder, temp_filename, wellmap)
-    # if no modfields, redirect to confirm
+    modFields = findModFields(folder, temp_filename)
+    if modFields != []:
+        return redirect(url_for('Modify', filename=filename))
     return redirect(url_for('Confirm', filename=filename))
 
 @app.route('/Protocol/<filename>')
@@ -72,7 +73,7 @@ def Simulate(filename):
     temp_filename = 'temp_' + filename
     folder = "TemporaryFiles"
     simulationLog = simulateScript(folder, temp_filename)
-    return render_template('simulate.html', simulationLog=simulationLog, filename=filename)
+    return render_template('simulate.html', simulationLog=simulationLog[1], filename=filename, error=simulationLog[0])
 
 @app.route('/FileReady/<filename>')
 def FileReady(filename):
@@ -87,8 +88,9 @@ def ReturnFile(filename):
 def SaveHistory(filename):
     form = historyForm()
     if form.validate_on_submit():
-        print(form.email.data)
-        print(form.description.data)
+        email = form.email.data
+        description = form.description.data
+        saveHistory(filename, email, description)
         return redirect(url_for('home'))
     return render_template('save_history.html', filename=filename, form=form)
 

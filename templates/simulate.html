@@ -3,9 +3,17 @@
 
 <h1>Simulate {{filename}}</h1>
 
-{% for line in simulationLog %}
-    <p>{{ line |replace("\t", "&nbsp;"|safe*8)}}</p>
-{% endfor %}
+<div class='container'>
+    {% if error %}
+    <h2>An error has occurred.</h2>
+    <b>Errors are most commonly IndexErrors. Double-check the values you entered on the modify page.</b>
+    {% endif %}
+</div>
+
+<div class='container'>
+    <p style="white-space: pre-wrap; line-height: 35px;">{{simulationLog}}</p>
+</div>
+
 
 <a href="{{url_for('Confirm', filename=filename)}}">
     <div class='container text-right'>
