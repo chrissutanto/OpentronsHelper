@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, FormField, FieldList, TextField, SubmitField
+from wtforms import StringField, FormField, FieldList, TextAreaField, SubmitField
 
 class fieldForm(FlaskForm):
     value = StringField('')
@@ -9,5 +9,5 @@ class modifyForm(FlaskForm):
 
 class historyForm(FlaskForm):
     email = StringField("Email")
-    description = TextField("Description")
+    description = TextAreaField("Description")
     submit = SubmitField('Submit')

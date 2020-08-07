@@ -1,6 +1,7 @@
 import os, shutil
 from datetime import datetime
 from ScriptHandler import findWellmap
+from EmailHandler import sendEmail
 
 # Checks if protocol folder exists, if not creates a folder then returns None. Otherwise, returns list of files
 def getProtocolList():
@@ -59,8 +60,11 @@ def saveHistory(filename, email, description):
     # if there's a well map, add sheet to folder
 
     wellmap = findWellmap(filename)
-    shutil.copyfile('WellMaps/{}'.format(wellmap), 'History/{}/{}'.format(title, wellmap))
+    if wellmap != None:
+        shutil.copyfile('WellMaps/{}'.format(wellmap), 'History/{}/{}'.format(title, wellmap))
+
     # email to user
+    sendEmail(title, email, description, wellmap)
 
 
 
