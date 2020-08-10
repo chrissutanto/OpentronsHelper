@@ -14,11 +14,18 @@
     <p style="white-space: pre-wrap; line-height: 35px;">{{simulationLog}}</p>
 </div>
 
-
+{% if history %}
+<a href="{{url_for('HistoryConfirm', filename=filename)}}">
+    <div class='container text-right'>
+        <h3>Continue</h3>
+    </div>
+</a>
+{% else %}
 <a href="{{url_for('Confirm', filename=filename)}}">
     <div class='container text-right'>
         <h3>Continue</h3>
     </div>
 </a>
+{% endif %}
 
 {% endblock content %}

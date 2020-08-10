@@ -1,5 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, FormField, FieldList, TextAreaField, SubmitField
+from wtforms import StringField, FormField, FieldList, TextAreaField, SubmitField, validators
+import email_validator
 
 class fieldForm(FlaskForm):
     value = StringField('')

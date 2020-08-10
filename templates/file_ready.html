@@ -9,16 +9,24 @@
     <p>Follow the instructions in the app, and click "Save History" when complete.</p>
 </div>
 
+{% if history %}
+<a href="{{url_for('ReturnFileHistory', filename=filename)}}">
+    <div class='container text-right'>
+        <h3>Download</h3>
+    </div>
+</a>
+{% else %}
 <a href="{{url_for('ReturnFile', filename=filename)}}">
     <div class='container text-right'>
         <h3>Download</h3>
     </div>
 </a>
-
 <a href="{{url_for('SaveHistory', filename=filename)}}">
     <div class='container text-right'>
         <h3>Save History</h3>
     </div>
 </a>
+{% endif %}
+
 
 {% endblock content %}

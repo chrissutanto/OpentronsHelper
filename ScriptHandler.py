@@ -89,9 +89,8 @@ def findModFields(folder, filename):
     return fields
 
 # Takes filename, returns linked well map filename (returns none if none)
-def findWellmap(filename):
-    temp_filename = "temp_" + filename
-    lines = getLines("TemporaryFiles", temp_filename)
+def findWellmap(folder, filename):
+    lines = getLines(folder, filename)
     for line in lines:
         if "# wellmap" in line:
             wellmap = line[24:-3]
@@ -129,6 +128,14 @@ def wellMapEnabled(metadata):
                 return True
     return False
 
+# takes folder and filename, returns if file is a history file
+def isHistory(folder, filename):
+    lines = getLines(folder, filename)
+    for line in lines:
+        if "# HISTORY FILE" in line:
+            return True
+    return False
+
 # Takes folder and filename, simulates protocol file and returns log
 def simulateScript(folder, filename):
     # command = os.popen(r"opentrons_simulate.exe {}\{}".format(folder, filename)).read().splitlines()
@@ -138,6 +145,8 @@ def simulateScript(folder, filename):
     out = p.communicate()[0]
     err = p.communicate()[1]
     error = False
+
+    print("simulating: " + folder + "/" + filename)
 
     if p.returncode != 0: 
         error = True

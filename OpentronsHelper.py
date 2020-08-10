@@ -1,6 +1,6 @@
 from flask import Flask, render_template, url_for, redirect, send_file
-from FileManager import getProtocolList, getWellMapList, makeTempFile, saveHistory
-from ScriptHandler import findLabware, findPipettes, findMetadata, findModFields, editModFields, wellMapEnabled, editScriptRTPCR, simulateScript
+from FileManager import getProtocolList, getWellMapList, makeTempFile, saveHistory, getHistoryList
+from ScriptHandler import findLabware, findPipettes, findMetadata, findModFields, editModFields, wellMapEnabled, editScriptRTPCR, simulateScript, findWellmap, isHistory
 from Forms import modifyForm, historyForm
 from datetime import datetime
 import os
@@ -66,23 +66,46 @@ def Confirm(filename):
     pipettes = findPipettes(folder, temp_filename)
     metadata = findMetadata(folder, temp_filename)
     modFields = findModFields(folder, temp_filename)
-    return render_template('confirm.html', protocol=filename, labwareList=labware, pipetteList=pipettes, metadataList = metadata, modFieldList=modFields)
+    return render_template('confirm.html', protocol=filename, labwareList=labware, pipetteList=pipettes, metadataList = metadata, modFieldList=modFields, history=False)
+
+@app.route('/HistoryConfirm/<filename>')
+def HistoryConfirm(filename):
+    folder = "History/{}".format(filename)
+    labware = findLabware(folder, filename)
+    pipettes = findPipettes(folder, filename)
+    metadata = findMetadata(folder, filename)
+    modFields = findModFields(folder, filename)
+    return render_template('confirm.html', protocol=filename, labwareList=labware, pipetteList=pipettes, metadataList = metadata, modFieldList=modFields, history=True)
 
 @app.route('/Simulate/<filename>')
 def Simulate(filename):
     temp_filename = 'temp_' + filename
     folder = "TemporaryFiles"
     simulationLog = simulateScript(folder, temp_filename)
-    return render_template('simulate.html', simulationLog=simulationLog[1], filename=filename, error=simulationLog[0])
+    return render_template('simulate.html', simulationLog=simulationLog[1], filename=filename, error=simulationLog[0], history=False)
+
+@app.route('/SimulateHistory/<filename>')
+def SimulateHistory(filename):
+    folder = "History/{}".format(filename)
+    simulationLog = simulateScript(folder, filename)
+    return render_template('simulate.html', simulationLog=simulationLog[1], filename=filename, error=simulationLog[0], history=True)
 
 @app.route('/FileReady/<filename>')
 def FileReady(filename):
-    return render_template('file_ready.html', filename=filename)
+    return render_template('file_ready.html', filename=filename, history=False)
+
+@app.route('/FileReadyHistory/<filename>')
+def FileReadyHistory(filename):
+    return render_template('file_ready.html', filename=filename, history=True)
 
 @app.route('/ReturnFile/<filename>')
 def ReturnFile(filename):
     temp_filename = 'temp_' + filename
     return send_file('TemporaryFiles/{}'.format(temp_filename), as_attachment=True, cache_timeout=-1)
+
+@app.route('/ReturnFileHistory/<filename>')
+def ReturnFileHistory(filename):
+    return send_file('History/{}/{}'.format(filename, filename), as_attachment=True, cache_timeout=-1)
 
 @app.route('/SaveHistory/<filename>', methods=('GET', 'POST'))
 def SaveHistory(filename):
@@ -93,6 +116,21 @@ def SaveHistory(filename):
         saveHistory(filename, email, description)
         return redirect(url_for('home'))
     return render_template('save_history.html', filename=filename, form=form)
+
+@app.route('/History')
+def History():
+    historyList = getHistoryList()
+    return render_template('history_list.html', historyList=historyList)
+
+@app.route('/History/Protocol/<filename>')
+def ProtocolHistory(filename):
+    folder = "History/{}".format(filename)
+    labware = findLabware(folder, filename)
+    pipettes = findPipettes(folder, filename)
+    metadata = findMetadata(folder, filename)
+    modFields = findModFields(folder, filename)
+    wellmap = findWellmap(folder, filename)
+    return render_template('protocol_history.html', history=filename, labwareList=labware, pipetteList=pipettes, metadataList=metadata, modFieldList=modFields, wellmap=wellmap)
 
 if __name__== '__main__':
     app.run(debug=True)

@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+{% block content %}
+<h1>History</h1>
+
+{% if historyList == [] %}
+<div class='container'>
+    <p>No History</p>
+</div>    
+{% endif %}
+
+{% for history in historyList %}
+    <a href="{{url_for('ProtocolHistory', filename=history)}}">
+        <div class='container'>
+            <h3>{{history}}</h3>
+        </div>
+    </a>
+{% endfor %}
+
+{% endblock content %}

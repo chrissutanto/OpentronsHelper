@@ -1,7 +1,6 @@
 {% extends "layout.html" %}
 {% block content %}
-
-<h1>Confirm {{protocol}}</h1>
+<h1>{{history}}</h1>
 
 <h2>Metadata</h2>
 {% for metadata in metadataList %}
@@ -33,26 +32,23 @@
     </div>
 {% endfor %}
 
-{% if not history %}
-<a href="{{url_for('Simulate', filename=protocol)}}">
+{% if wellmap != None %}
+    <h2>Wellmap</h2>
+    <div class='container'>
+        <p>{{wellmap}}</p>
+    </div>
+{% endif %}
+
+<a href="{{url_for('SimulateHistory', filename=history)}}">
     <div class='container text-right'>
         <h3>Simulate</h3>
     </div>
 </a>
-{% end if %}
 
-{% if history %}
-<a href="{{url_for('FileReadyHistory', filename=protocol)}}">
+<a href="{{url_for('FileReadyHistory', filename=history)}}">
     <div class='container text-right'>
         <h3>Confirm</h3>
     </div>
 </a>
-{% else %}
-<a href="{{url_for('FileReady', filename=protocol)}}">
-    <div class='container text-right'>
-        <h3>Confirm</h3>
-    </div>
-</a>
-{% endif %}
 
 {% endblock content %}
