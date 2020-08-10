@@ -52,4 +52,10 @@
     </a>
 {% endif %}
 
+<a href="{{url_for('DeleteProtocolConfirm', filename=protocol)}}">
+    <div class='container text-right' style="color:red;">
+        <h3>Delete Protocol</h3>
+    </div>
+</a>
+
 {% endblock content %}

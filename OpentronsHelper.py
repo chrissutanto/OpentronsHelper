@@ -1,5 +1,5 @@
-from flask import Flask, render_template, url_for, redirect, send_file
-from FileManager import getProtocolList, getWellMapList, makeTempFile, saveHistory, getHistoryList
+from flask import Flask, render_template, url_for, redirect, send_file, request
+from FileManager import getProtocolList, getWellMapList, makeTempFile, saveHistory, getHistoryList, deleteFile
 from ScriptHandler import findLabware, findPipettes, findMetadata, findModFields, editModFields, wellMapEnabled, editScriptRTPCR, simulateScript, findWellmap, isHistory
 from Forms import modifyForm, historyForm
 from datetime import datetime
@@ -17,6 +17,26 @@ def ProtocolScripts():
     protocolList = getProtocolList()
     directory = os.getcwd()
     return render_template('protocol_scripts.html', protocolList=protocolList, directory=directory)
+
+@app.route('/AddProtocol')
+def AddProtocol():
+    return render_template('add_protocol.html')
+
+@app.route('/uploader', methods=['GET', 'POST'])
+def UploadProtocol():
+    if request.method == "POST":
+        f = request.files['file']
+        f.save(os.path.join('ProtocolFiles/', f.filename))
+        return redirect(url_for('ProtocolScripts'))
+
+@app.route('/DeleteProtocolConfirm/<filename>')
+def DeleteProtocolConfirm(filename):
+    return render_template('delete_protocol.html', protocol=filename)
+
+@app.route('/DeleteProtocol/<filename>')
+def DeleteProtocol(filename):
+    deleteFile('ProtocolFiles', filename)
+    return redirect(url_for('ProtocolScripts'))
 
 @app.route('/WellMapSelect/<filename>')
 def WellMapSelect(filename):

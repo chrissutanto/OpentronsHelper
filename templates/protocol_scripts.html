@@ -6,6 +6,12 @@
     <p>No protocol files found, please add to {{directory}}\ProtocolFiles</p>
 {% endif %}
 
+<a href="{{url_for('AddProtocol')}}">
+    <div class='container'>
+        <h3>Add Protocol</h3>
+    </div>
+</a>
+
 {% for protocol in protocolList %}
     <a href="{{url_for('Protocol', filename=protocol)}}">
         <div class='container'>

@@ -41,6 +41,10 @@ def makeTempFile(filename):
         os.mkdir('TemporaryFiles')
     shutil.copyfile('ProtocolFiles/{}'.format(filename), 'TemporaryFiles/temp_{}'.format(filename))
 
+# Deletes file
+def deleteFile(folder, filename):
+    os.remove(os.path.join(folder, filename))
+
 #-------------------- History Saving --------------------
 
 # Takes filename, description, and directory, writes description to text file in folder
