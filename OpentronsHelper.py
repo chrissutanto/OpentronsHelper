@@ -22,12 +22,26 @@ def ProtocolScripts():
 def AddProtocol():
     return render_template('add_protocol.html')
 
-@app.route('/uploader', methods=['GET', 'POST'])
+@app.route('/protocoluploader', methods=['GET', 'POST'])
 def UploadProtocol():
     if request.method == "POST":
         f = request.files['file']
         f.save(os.path.join('ProtocolFiles/', f.filename))
         return redirect(url_for('ProtocolScripts'))
+
+@app.route('/AddWellMap/<filename>')
+def AddWellMap(filename):
+    return render_template('add_wellmap.html', filename=filename)
+
+@app.route('/wellmapuploader/<filename>', methods=['GET', 'POST'])
+def UploadWellMap(filename):
+    if request.method == "POST":
+        f = request.files['file']
+        f.save(os.path.join('WellMaps/', f.filename))
+        if filename == 'None':
+            return redirect(url_for('ManageWellMaps'))
+        else:
+            return redirect(url_for('WellMapSelect', filename=filename))
 
 @app.route('/DeleteProtocolConfirm/<filename>')
 def DeleteProtocolConfirm(filename):
@@ -37,6 +51,20 @@ def DeleteProtocolConfirm(filename):
 def DeleteProtocol(filename):
     deleteFile('ProtocolFiles', filename)
     return redirect(url_for('ProtocolScripts'))
+
+@app.route('/ManageWellMaps')
+def ManageWellMaps():
+    wellMapList = getWellMapList()
+    return render_template('manage_wellmaps.html', wellMapList=wellMapList)
+
+@app.route('/DeleteWellMapConfirm/<filename>')
+def DeleteWellMapConfirm(filename):
+    return render_template('delete_wellmap.html', wellmap=filename)
+
+@app.route('/DeleteWellMap/<filename>')
+def DeleteWellMap(filename):
+    deleteFile('WellMaps', filename)
+    return redirect(url_for('ManageWellMaps'))
 
 @app.route('/WellMapSelect/<filename>')
 def WellMapSelect(filename):

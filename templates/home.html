@@ -1,8 +1,11 @@
 {% extends "layout.html" %}
 {% block content %}
-<h1>Home Page</h1>
+<h1>Opentrons Helper</h1>
 <h2>
     <a href="{{url_for('ProtocolScripts')}}">Protocol Scripts</a>
+</h2>
+<h2>
+    <a href="{{url_for('ManageWellMaps')}}">Manage Well Maps</a>
 </h2>
 <h2>
     <a href="{{url_for('History')}}">History</a>

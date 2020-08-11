@@ -1,23 +1,23 @@
 {% extends "layout.html" %}
 {% block content %}
-<h1>Select Well Map for {{protocol}}</h1>
+<h1>Manage Well Maps</h1>
 
 {% if wellMapList == [] %}
     <p>No well map files found.</p>
 {% endif %}
 
-<a href="{{url_for('AddWellMap', filename=protocol)}}">
+<a href="{{url_for('AddWellMap', filename='None')}}">
     <div class='container'>
         <h3>Add Well Map</h3>
     </div>
 </a>
 
 {% for wellMap in wellMapList %}
-    <a href="{{url_for('ApplyWellMap', filename=protocol, wellmap=wellMap)}}">
-        <div class='container'>
-            <h3>{{wellMap}}</h3>
-        </div>
-    </a>
+<a href="{{url_for('DeleteWellMapConfirm', filename=wellMap)}}">
+    <div class='container'>
+        <h3>{{wellMap}}</h3>
+    </div>
+</a>
 {% endfor %}
 
 {% endblock content %}

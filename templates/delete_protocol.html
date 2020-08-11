@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% block content %}
+<h1>Delete {{protocol}}</h1>
+
+<h3>Are you sure you want to delete {{protocol}}?</h3>
+
+<a href="{{url_for('DeleteProtocol', filename=protocol)}}">
+    <div class='container text-right' style="color:#ff0000;">
+        <h3>Yes</h3>
+    </div>
+</a>
+
+
+{% endblock content %}

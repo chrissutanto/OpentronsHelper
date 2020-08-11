@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% block content %}
+<h1>Delete {{wellmap}}</h1>
+
+<h3>Are you sure you want to delete {{wellmap}}?</h3>
+
+<a href="{{url_for('DeleteWellMap', filename=wellmap)}}">
+    <div class='container text-right' style="color:#ff0000;">
+        <h3>Yes</h3>
+    </div>
+</a>
+
+
+{% endblock content %}
