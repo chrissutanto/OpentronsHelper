@@ -1,17 +1,20 @@
-import os, shutil
+import os, shutil, time
 from datetime import datetime
-from ScriptHandler import findWellmap
+from ScriptHandler import findWellmap, findDescription
 from EmailHandler import sendEmail
 
 # Checks if protocol folder exists, if not creates a folder then returns None. Otherwise, returns list of files
 def getProtocolList():
+    protocolList = []
     if os.path.exists('ProtocolFiles'):
-        protocolList = os.listdir('ProtocolFiles')
+        nameList = os.listdir('ProtocolFiles')
         path = 'ProtocolFiles'
-        protocolList.sort(key=lambda x: os.path.getmtime(os.path.join(path, x)), reverse=True)
+        nameList.sort(key=lambda x: os.path.getmtime(os.path.join(path, x)), reverse=True)
+        for name in nameList:
+            protocol = {'name': name, 'time': time.ctime(os.path.getmtime(os.path.join(path, name))), 'description': findDescription(path, name)}
+            protocolList.append(protocol)
     else:
         os.mkdir('ProtocolFiles')
-        protocolList = []
     return protocolList
 
 # Checks if history folder exists, then returns history list

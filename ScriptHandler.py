@@ -77,6 +77,13 @@ def findMetadata(folder, filename):
             break
     return metadata
 
+# Takes filename, folder, returns description
+def findDescription(folder, filename):
+    metadata = findMetadata(folder, filename)
+    for item in metadata:
+        if item['field'] == 'description':
+            return item['value']
+
 # Takes filename, returns list of dict containing mod field info
 def findModFields(folder, filename):
     fields = []

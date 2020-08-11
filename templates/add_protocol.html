@@ -1,11 +1,21 @@
 {% extends "layout.html" %}
 {% block content %}
 
-<h1>Add Protocol</h1>
+<div class="row mt-4">
+    <div class="col-12">
+        <h1>Upload a Protocol Script</h1>
+    </div>
+</div>
 
-<form action = "http://localhost:5000/protocoluploader" method = "POST" enctype = "multipart/form-data">
-    <input type='file' name='file' />
-    <input type='submit'/>
-</form>
+
+<div class="row mt-4">
+    <div class="form-group col-9">
+        <form action = "http://localhost:5000/protocoluploader" method = "POST" enctype = "multipart/form-data">
+            <input class="btn btn-outline-primary " type='file' name='file'/><br>
+            <small id="fileHelp" class="form-text text-muted">Uploaded scripts will override existing scripts with the same name.</small>
+            <button type="submit" class="btn btn-outline-primary mt-4 justify-content-end btn-lg">Submit</button>
+        </form>
+    </div>
+</div>
 
 {% endblock content %}

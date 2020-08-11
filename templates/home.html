@@ -1,13 +1,48 @@
 {% extends "layout.html" %}
 {% block content %}
-<h1>Opentrons Helper</h1>
-<h2>
-    <a href="{{url_for('ProtocolScripts')}}">Protocol Scripts</a>
-</h2>
-<h2>
-    <a href="{{url_for('ManageWellMaps')}}">Manage Well Maps</a>
-</h2>
-<h2>
-    <a href="{{url_for('History')}}">History</a>
-</h2>
+
+<div class="jumbotron mt-5">
+    <h1 class="display-3">Opentrons Helper</h1>
+    <p class="lead">Opentrons Companion Application for Protocol Script Organization and Modification</p>
+    <hr class="my-4">
+    <p>Select an option below, or click "learn more" for the usage guide.</p>
+    <p class="lead">
+      <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
+    </p>
+  </div>
+<div class="row mt-5">
+    <div class="col-4">
+        <a href="{{url_for('ProtocolScripts')}}">
+            <div class="card border-primary mb-3" style="max-height: 10rem; min-height: 10rem; color:#3e3f3a;">
+                <div class="card-header">Add, modify, and run protocol scripts.</div>
+                <div class="card-body">
+                  <h2 class="card-title">Protocol Scripts</h2>
+                  <p class="card-text"></p>
+                </div>
+            </div> 
+        </a>
+    </div>
+    <div class="col-4">
+        <a href="{{url_for('ManageWellMaps')}}">
+            <div class="card border-primary mb-3" style="max-height: 10rem; min-height: 10rem; color:#3e3f3a;">
+                <div class="card-header">Add and delete well maps.</div>
+                <div class="card-body">
+                  <h2 class="card-title">Manage Well Maps</h2>
+                  <p class="card-text"></p>
+                </div>
+            </div> 
+        </a>
+    </div>
+    <div class="col-4">
+        <a href="{{url_for('History')}}">
+            <div class="card border-primary mb-3" style="max-height: 10rem; min-height: 10rem; color:#3e3f3a;">
+                <div class="card-header">View history and repeat protocol runs.</div>
+                <div class="card-body">
+                  <h2 class="card-title">History</h2>
+                  <p class="card-text"></p>
+                </div>
+            </div> 
+        </a>
+    </div>
+</div>
 {% endblock content %}

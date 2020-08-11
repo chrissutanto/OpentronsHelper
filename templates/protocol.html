@@ -1,36 +1,72 @@
 {% extends "layout.html" %}
 {% block content %}
-<h1>{{protocol}}</h1>
 
-<h2>Metadata</h2>
-{% for metadata in metadataList %}
-    <div class='container'>
-        <p>{{metadata.field}}: {{metadata.value}}</p>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <h1>{{protocol}}</h1>
     </div>
-{% endfor %}
+</div>
+
+
+<h2 class="mt-4">Metadata</h2>
+<div class="row mt-4">
+    {% for metadata in metadataList %}
+    <div class="col-4 justify-content-start">
+        <div class="card border-success mb-3 " style="max-height: 10rem; min-height: 10rem">
+            <div class="card-header">{{metadata.field.capitalize()}}</div>
+            <div class="card-body">
+            <h4 class="card-title">{{metadata.value}}</h4>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
 
 {% if modFieldList != [] %}
-    <h2>Modifiable Fields</h2>
-    {% for modField in modFieldList %}
-        <div class='container'>
-            <p>{{modField.field}}: {{modField.value}}</p>
+    <h2 class="mt-4">Modifiable Fields</h2>
+    <div class="row mt-4">
+        {% for modField in modFieldList %}
+        <div class="col-4 justify-content-start">
+            <div class="card border-danger mb-3 " style="max-height: 10rem; min-height: 10rem">
+                <div class="card-header">{{modField.field}}</div>
+                <div class="card-body">
+                <h4 class="card-title">{{modField.value}}</h4>
+                <p class="card-text">{{modField.description}}</p>
+                </div>
+            </div>
         </div>
-    {% endfor %}
+        {% endfor %}
+    </div>
 {% endif %}
 
-<h2>Pipettes</h2>
-{% for pipette in pipetteList %}
-    <div class='container'>
-        <p>Location: {{pipette.location}}, Pipette: {{pipette.item}}</p>
+<h2 class="mt-4">Pipettes</h2>
+<div class="row mt-4">
+    {% for pipette in pipetteList %}
+    <div class="col-4 justify-content-start">
+        <div class="card border-warning mb-3 " style="max-height: 10rem; min-height: 10rem">
+            <div class="card-header">{{pipette.location.capitalize()}} Pipette Mount</div>
+            <div class="card-body">
+            <h4 class="card-title">{{pipette.item}}</h4>
+            </div>
+        </div>
     </div>
-{% endfor %}
+    {% endfor %}
+</div>
 
-<h2>Labware</h2>
-{% for labware in labwareList %}
-    <div class='container'>
-        <p>Location: {{labware.location}}, Labware: {{labware.item}}</p>
+<h2 class="mt-4">Labware</h2>
+<div class="row mt-4">
+    {% for labware in labwareList %}
+    <div class="col-4 justify-content-start">
+        <div class="card border-info mb-3 " style="max-height: 10rem; min-height: 10rem">
+            <div class="card-header">Deck {{labware.location.capitalize()}}</div>
+            <div class="card-body">
+            <h4 class="card-title">{{labware.item}}</h4>
+            </div>
+        </div>
     </div>
-{% endfor %}
+    {% endfor %}
+</div>
 
 {% if wellMapEnabled %}
     <a href="{{url_for('WellMapSelect', filename=protocol)}}">

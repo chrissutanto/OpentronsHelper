@@ -33,6 +33,10 @@ def UploadProtocol():
 def AddWellMap(filename):
     return render_template('add_wellmap.html', filename=filename)
 
+@app.route('/ReturnWellMapTemplate')
+def ReturnWellMapTemplate():
+    return send_file('static/WellMapTemplate.xlsx', as_attachment=True, cache_timeout=-1)
+
 @app.route('/wellmapuploader/<filename>', methods=['GET', 'POST'])
 def UploadWellMap(filename):
     if request.method == "POST":
