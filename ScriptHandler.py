@@ -102,7 +102,7 @@ def findWellmap(folder, filename):
         if "# wellmap" in line:
             wellmap = line[24:-3]
             return wellmap
-    return None
+    return []
 
 
 # Takes list of tuples representing user input, updates script modfields

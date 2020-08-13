@@ -1,31 +1,35 @@
 {% extends "layout.html" %}
 {% block content %}
 
-<h1>Simulate {{filename}}</h1>
-
-<div class='container'>
+<div class="row mt-4">
+    <div class="col">
+        <h1>Simulate {{filename}}</h1>
+    </div>
+    <div class="col-4 justify-content-end d-flex">
+        {% if history %}
+        <a href="{{url_for('HistoryConfirm', filename=filename)}}">
+            <div class='container text-right'>
+                <button type="button" class="btn btn-lg btn-primary">Continue</button>
+            </div>
+        </a>
+        {% else %}
+        <a href="{{url_for('Confirm', filename=filename)}}">
+            <div class='container text-right'>
+                <button type="button" class="btn btn-lg btn-primary">Continue</button>
+            </div>
+        </a>
+        {% endif %}
+    </div>
+</div>
+<div class='container mt-4'>
     {% if error %}
     <h2>An error has occurred.</h2>
     <b>Errors are most commonly IndexErrors. Double-check the values you entered on the modify page.</b>
     {% endif %}
 </div>
 
-<div class='container'>
+<div class='container mt-4'>
     <p style="white-space: pre-wrap; line-height: 35px;">{{simulationLog}}</p>
 </div>
-
-{% if history %}
-<a href="{{url_for('HistoryConfirm', filename=filename)}}">
-    <div class='container text-right'>
-        <h3>Continue</h3>
-    </div>
-</a>
-{% else %}
-<a href="{{url_for('Confirm', filename=filename)}}">
-    <div class='container text-right'>
-        <h3>Continue</h3>
-    </div>
-</a>
-{% endif %}
 
 {% endblock content %}

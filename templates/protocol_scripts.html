@@ -13,18 +13,18 @@
 {% endif %}
 
 <div class="row mt-4">
-        <div class="col-sm">
-            <a href="{{url_for('AddProtocol')}}">
-                <div class="card text-white border-primary mb-3" style="max-height: 10rem; min-height: 10rem; background-color: #325d88;">
-                    <div class="card-header">Add Protocol Script</div>
-                    <div class="card-body">
-                    <h4 class="card-title text-center" style="font-size: 60px;">+</h4>
-                    </div>
+    <div class="col-sm-4">
+        <a href="{{url_for('AddProtocol')}}">
+            <div class="card text-white border-primary mb-3" style="max-height: 10rem; min-height: 10rem; background-color: #325d88;">
+                <div class="card-header">Add Protocol Script</div>
+                <div class="card-body">
+                <h4 class="card-title text-center flex-child" style="font-size: 60px;">+</h4>
                 </div>
-            </a>
-        </div>
+            </div>
+        </a>
+    </div>
     {% for protocol in protocolList %}
-        <div class="col-4 justify-content-start">
+        <div class="col-sm-4 justify-content-start">
             <a href="{{url_for('Protocol', filename=protocol.name)}}">
                 <div class="card border-primary mb-3" style="max-height: 10rem; min-height: 10rem; color:#3e3f3a;">
                     <div class="card-header">{{protocol.time}}</div>

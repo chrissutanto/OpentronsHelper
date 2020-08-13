@@ -29,13 +29,16 @@ def getHistoryList():
 
 # Checks if well map folder exists, if not creates a folder then returns None. Otherwise, returns list of well map files
 def getWellMapList():
+    wellMapList = []
     if os.path.exists('WellMaps'):
-        wellMapList = os.listdir('WellMaps')
+        nameList = os.listdir('WellMaps')
         path = 'WellMaps/'
         wellMapList.sort(key = lambda x: os.path.getmtime(os.path.join(path, x)), reverse=True)
+        for name in nameList:
+            wellMap = {'name': name, 'time': time.ctime(os.path.getmtime(os.path.join(path, name)))}
+            wellMapList.append(wellMap)
     else:
         os.mkdir('WellMaps')
-        wellMapList = []
     return wellMapList
 
 # Takes filename and duplicates it into temporary file folder (creates one if does not exist)

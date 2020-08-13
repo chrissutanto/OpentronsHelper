@@ -118,7 +118,9 @@ def Confirm(filename):
     pipettes = findPipettes(folder, temp_filename)
     metadata = findMetadata(folder, temp_filename)
     modFields = findModFields(folder, temp_filename)
-    return render_template('confirm.html', protocol=filename, labwareList=labware, pipetteList=pipettes, metadataList = metadata, modFieldList=modFields, history=False)
+    wellmap = findWellmap(folder, temp_filename)
+    simulationLog = simulateScript(folder, temp_filename)
+    return render_template('confirm.html', protocol=filename, labwareList=labware, pipetteList=pipettes, metadataList = metadata, modFieldList=modFields, history=False, wellmap=wellmap, simulationLog=simulationLog[1], error=simulationLog[0])
 
 @app.route('/HistoryConfirm/<filename>')
 def HistoryConfirm(filename):

@@ -1,58 +1,161 @@
 {% extends "layout.html" %}
-{% block content %}
+{% block content %}  
 
-<h1>Confirm {{protocol}}</h1>
-
-<h2>Metadata</h2>
-{% for metadata in metadataList %}
-    <div class='container'>
-        <p>{{metadata.field}}: {{metadata.value}}</p>
+<div class="row mt-4">
+    <div class="col">
+        <h1>{{protocol}}</h1>
     </div>
-{% endfor %}
+    <div class="col-4 justify-content-end d-flex">
+        <button type="button" class="btn btn-lg btn-primary" data-toggle="modal" data-target="#exampleModal">Generate File</button>
+    </div>
+</div>
 
-{% if modFieldList != [] %}
-    <h2>Modifiable Fields</h2>
-    {% for modField in modFieldList %}
-        <div class='container'>
-            <p>{{modField.field}}: {{modField.value}}</p>
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">File Generated</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Click the "Download File" button to retrieve the file.</p>
+                <p>Drag and drop the downloaded file into the Opentrons app.</p>
+                <p>Follow the instructions in the app, and click "Save History" when complete.</p>
+            </div>
+            <div class="modal-footer">
+                <a href="{{url_for('ReturnFile', filename=protocol)}}">
+                    <button type="button" class="btn btn-lg btn-primary">Download File</button>
+                </a>
+                <a href="{{url_for('SaveHistory', filename=protocol)}}">
+                    <button type="button" class="btn btn-lg btn-secondary">Save History</button>
+                </a>
+            </div>
         </div>
-    {% endfor %}
-{% endif %}
+    </div>
+</div>
 
-<h2>Pipettes</h2>
-{% for pipette in pipetteList %}
-    <div class='container'>
-        <p>Location: {{pipette.location}}, Pipette: {{pipette.item}}</p>
-    </div>
-{% endfor %}
 
-<h2>Labware</h2>
-{% for labware in labwareList %}
-    <div class='container'>
-        <p>Location: {{labware.location}}, Labware: {{labware.item}}</p>
+<ul class="nav nav-tabs mt-4">
+    <li class="nav-item">
+      <a class="nav-link active" data-toggle="tab" href="#metadata">Metadata</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" data-toggle="tab" href="#pipettes">Pipettes</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" data-toggle="tab" href="#labware">Labware</a>
+    </li>
+    {% if modFieldList != [] %}
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#modfields">Modifiable Fields</a>
+        </li>
+    {% endif %}
+    {% if wellmap != [] %}
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#wellmap">Well Map</a>
+        </li>
+    {% endif %}
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#simulation">Simulation Log</a>
+      </li>
+  </ul>
+  <div id="myTabContent" class="tab-content">
+    <div class="tab-pane fade active show" id="metadata">
+        <h2 class="mt-4">Metadata</h2>
+        <div class="row mt-4">
+            {% for metadata in metadataList %}
+            <div class="col-4 justify-content-start">
+                <div class="card border-success mb-3 d-flex" style="max-height: 10rem; min-height: 10rem; min-width: 15rem;">
+                    <div class="card-header">{{metadata.field.capitalize()}}</div>
+                    <div class="card-body">
+                    <h4 class="card-title">{{metadata.value}}</h4>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
     </div>
-{% endfor %}
+    <div class="tab-pane fade" id="pipettes">
+        <h2 class="mt-4">Pipettes</h2>
+        <div class="row mt-4">
+            {% for pipette in pipetteList %}
+            <div class="col-4 justify-content-start">
+                <div class="card border-warning mb-3 " style="max-height: 10rem; min-height: 10rem">
+                    <div class="card-header">{{pipette.location.capitalize()}} Pipette Mount</div>
+                    <div class="card-body">
+                    <h4 class="card-title">{{pipette.item}}</h4>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="tab-pane fade" id="labware">
+        <h2 class="mt-4">Labware</h2>
+        <div class="row mt-4">
+            {% for labware in labwareList %}
+            <div class="col-4 justify-content-start">
+                <div class="card border-info mb-3 " style="max-height: 10rem; min-height: 10rem">
+                    <div class="card-header">Deck {{labware.location.capitalize()}}</div>
+                    <div class="card-body">
+                    <h4 class="card-title">{{labware.item}}</h4>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="tab-pane fade" id="modfields">
+        {% if modFieldList != [] %}
+        <h2 class="mt-4">Modifiable Fields</h2>
+        <div class="row mt-4">
+            {% for modField in modFieldList %}
+            <div class="col-4 justify-content-start">
+                <div class="card border-danger mb-3 " style="max-height: 10rem; min-height: 10rem">
+                    <div class="card-header">{{modField.field}}</div>
+                    <div class="card-body">
+                    <h4 class="card-title">{{modField.value}}</h4>
+                    <p class="card-text">{{modField.description}}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+    <div class="tab-pane fade" id="wellmap">
+        {% if wellmap != [] %}
+        <h2 class="mt-4">Well Map</h2>
+        <div class="row mt-4">
+            <div class="col-4 justify-content-start">
+                <div class="card border-danger mb-3 " style="max-height: 10rem; min-height: 10rem">
+                    <div class="card-header">{{wellmap}}</div>
+                    <div class="card-body">
+                    <h4 class="card-title">{{wellmap}}</h4>
+                    <p class="card-text">{{wellmap}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    <div class="tab-pane fade" id="simulation">
+        <h2 class="mt-4">Simulation Log</h2>
+        <div class='container mt-4'>
+            {% if error %}
+            <h2>An error has occurred.</h2>
+            <b>Errors are most commonly IndexErrors. Double-check the values you entered on the modify page.</b>
+            {% endif %}
+        </div>
 
-{% if not history %}
-<a href="{{url_for('Simulate', filename=protocol)}}">
-    <div class='container text-right'>
-        <h3>Simulate</h3>
+        <div class="d-md-flex">
+            <div class="overflow-auto p-3 mb-3 mb-md-0 mr-md-3 bg-light" style="max-height: 500px;">
+                <p style="white-space: pre-wrap; line-height: 35px;">{{simulationLog}}</p>
+            </div>
+        </div>
     </div>
-</a>
-{% endif %}
-
-{% if history %}
-<a href="{{url_for('FileReadyHistory', filename=protocol)}}">
-    <div class='container text-right'>
-        <h3>Confirm</h3>
-    </div>
-</a>
-{% else %}
-<a href="{{url_for('FileReady', filename=protocol)}}">
-    <div class='container text-right'>
-        <h3>Confirm</h3>
-    </div>
-</a>
-{% endif %}
+  </div>
 
 {% endblock content %}

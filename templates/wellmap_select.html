@@ -1,23 +1,40 @@
 {% extends "layout.html" %}
 {% block content %}
-<h1>Select Well Map for {{protocol}}</h1>
+<div class="row mt-4">
+    <div class="col-12">
+        <h1>Select Well Map for {{protocol}}</h1>
+    </div>
+</div>
 
 {% if wellMapList == [] %}
     <p>No well map files found.</p>
 {% endif %}
 
-<a href="{{url_for('AddWellMap', filename=protocol)}}">
-    <div class='container'>
-        <h3>Add Well Map</h3>
+<div class="row mt-4">
+    <div class="col-sm-4">
+        <a href="{{url_for('AddWellMap', filename=protocol)}}">
+            <div class="card text-white border-primary mb-3" style="max-height: 10rem; min-height: 10rem; background-color: #325d88;">
+                <div class="card-header">Add Well Map</div>
+                <div class="card-body">
+                <h4 class="card-title text-center flex-child" style="font-size: 60px;">+</h4>
+                </div>
+            </div>
+        </a>
     </div>
-</a>
-
 {% for wellMap in wellMapList %}
-    <a href="{{url_for('ApplyWellMap', filename=protocol, wellmap=wellMap)}}">
-        <div class='container'>
-            <h3>{{wellMap}}</h3>
-        </div>
-    </a>
+    <div class="col-sm-4 justify-content-start">
+        <a href="{{url_for('ApplyWellMap', filename=protocol, wellmap=wellMap.name)}}">
+            <div class="card border-primary mb-3" style="max-height: 10rem; min-height: 10rem; color:#3e3f3a;">
+                <div class="card-header">{{wellMap.time}}</div>
+                <div class="card-body">
+                <h4 class="card-title">{{wellMap.name}}</h4>
+                <p class="card-text"></p>
+                </div>
+            </div>
+        </a>
+    </div>
 {% endfor %}
+</div>
+
 
 {% endblock content %}

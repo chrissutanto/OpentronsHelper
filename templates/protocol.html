@@ -3,95 +3,117 @@
 
 
 <div class="row mt-4">
-    <div class="col-12">
-        <h1>{{protocol}}</h1>
+    <div class="col">
+        <h1>{{protocol}} — Preview</h1>
+    </div>
+    <div class="col-4 justify-content-end d-flex">
+        {% if wellMapEnabled %}
+            <button class="btn btn-lg btn-primary" onclick="location.href='{{url_for('WellMapSelect', filename=protocol)}}'">Continue</button>
+        {% elif modFieldList != [] %}
+            <button class="btn btn-lg btn-primary" onclick="location.href='{{url_for('Modify', filename=protocol)}}'">Continue</button>
+        {% else %}
+            <button class="btn btn-lg btn-primary" onclick="location.href='{{url_for('Confirm', filename=protocol)}}'" data-toggle="modal" data-target="#exampleModal">Continue</button>
+        {% endif %}    
+    </div>
+</div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <img src="/static/loading.gif" style="width: 60px;" class="center pt-5">
     </div>
 </div>
 
 
-<h2 class="mt-4">Metadata</h2>
-<div class="row mt-4">
-    {% for metadata in metadataList %}
-    <div class="col-4 justify-content-start">
-        <div class="card border-success mb-3 " style="max-height: 10rem; min-height: 10rem">
-            <div class="card-header">{{metadata.field.capitalize()}}</div>
-            <div class="card-body">
-            <h4 class="card-title">{{metadata.value}}</h4>
-            </div>
-        </div>
-    </div>
-    {% endfor %}
-</div>
 
-{% if modFieldList != [] %}
-    <h2 class="mt-4">Modifiable Fields</h2>
-    <div class="row mt-4">
-        {% for modField in modFieldList %}
-        <div class="col-4 justify-content-start">
-            <div class="card border-danger mb-3 " style="max-height: 10rem; min-height: 10rem">
-                <div class="card-header">{{modField.field}}</div>
-                <div class="card-body">
-                <h4 class="card-title">{{modField.value}}</h4>
-                <p class="card-text">{{modField.description}}</p>
+
+<ul class="nav nav-tabs mt-4">
+    <li class="nav-item">
+      <a class="nav-link active" data-toggle="tab" href="#metadata">Metadata</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" data-toggle="tab" href="#pipettes">Pipettes</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" data-toggle="tab" href="#labware">Labware</a>
+    </li>
+    {% if modFieldList != [] %}
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#modfields">Modifiable Fields</a>
+        </li>
+    {% endif %}
+    <li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Delete</a>
+      <div class="dropdown-menu" style="">
+        <a class="dropdown-item" href="{{url_for('DeleteProtocol', filename=protocol)}}" style="color:#d9534f;">Confirm Deletion</a>
+      </div>
+    </li>
+  </ul>
+  
+  <div id="myTabContent" class="tab-content">
+    <div class="tab-pane fade active show" id="metadata">
+        <h2 class="mt-4">Metadata</h2>
+        <div class="row mt-4">
+            {% for metadata in metadataList %}
+            <div class="col-sm-4 justify-content-start">
+                <div class="card border-success mb-3 d-flex" style="max-height: 10rem; min-height: 10rem; min-width: 15rem;">
+                    <div class="card-header">{{metadata.field.capitalize()}}</div>
+                    <div class="card-body">
+                    <h4 class="card-title">{{metadata.value}}</h4>
+                    </div>
                 </div>
             </div>
+            {% endfor %}
         </div>
-        {% endfor %}
     </div>
-{% endif %}
-
-<h2 class="mt-4">Pipettes</h2>
-<div class="row mt-4">
-    {% for pipette in pipetteList %}
-    <div class="col-4 justify-content-start">
-        <div class="card border-warning mb-3 " style="max-height: 10rem; min-height: 10rem">
-            <div class="card-header">{{pipette.location.capitalize()}} Pipette Mount</div>
-            <div class="card-body">
-            <h4 class="card-title">{{pipette.item}}</h4>
+    <div class="tab-pane fade" id="pipettes">
+        <h2 class="mt-4">Pipettes</h2>
+        <div class="row mt-4">
+            {% for pipette in pipetteList %}
+            <div class="col-sm-4 justify-content-start">
+                <div class="card border-warning mb-3 " style="max-height: 10rem; min-height: 10rem">
+                    <div class="card-header">{{pipette.location.capitalize()}} Pipette Mount</div>
+                    <div class="card-body">
+                    <h4 class="card-title">{{pipette.item}}</h4>
+                    </div>
+                </div>
             </div>
+            {% endfor %}
         </div>
     </div>
-    {% endfor %}
-</div>
-
-<h2 class="mt-4">Labware</h2>
-<div class="row mt-4">
-    {% for labware in labwareList %}
-    <div class="col-4 justify-content-start">
-        <div class="card border-info mb-3 " style="max-height: 10rem; min-height: 10rem">
-            <div class="card-header">Deck {{labware.location.capitalize()}}</div>
-            <div class="card-body">
-            <h4 class="card-title">{{labware.item}}</h4>
+    <div class="tab-pane fade" id="labware">
+        <h2 class="mt-4">Labware</h2>
+        <div class="row mt-4">
+            {% for labware in labwareList %}
+            <div class="col-sm-4 justify-content-start">
+                <div class="card border-info mb-3 " style="max-height: 10rem; min-height: 10rem">
+                    <div class="card-header">Deck {{labware.location.capitalize()}}</div>
+                    <div class="card-body">
+                    <h4 class="card-title">{{labware.item}}</h4>
+                    </div>
+                </div>
             </div>
+            {% endfor %}
         </div>
     </div>
-    {% endfor %}
-</div>
-
-{% if wellMapEnabled %}
-    <a href="{{url_for('WellMapSelect', filename=protocol)}}">
-        <div class='container text-right'>
-            <h3>Continue</h3>
+    <div class="tab-pane fade" id="modfields">
+        {% if modFieldList != [] %}
+        <h2 class="mt-4">Modifiable Fields</h2>
+        <div class="row mt-4">
+            {% for modField in modFieldList %}
+            <div class="col-sm-4 justify-content-start">
+                <div class="card border-danger mb-3 " style="max-height: 10rem; min-height: 10rem">
+                    <div class="card-header">{{modField.field}}</div>
+                    <div class="card-body">
+                    <h4 class="card-title">{{modField.value}}</h4>
+                    <p class="card-text">{{modField.description}}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
         </div>
-    </a>
-{% elif modFieldList != [] %}
-    <a href="{{url_for('Modify', filename=protocol)}}">
-        <div class='container text-right'>
-            <h3>Continue</h3>
-        </div>
-    </a>
-{% else %}
-    <a href="{{url_for('Confirm', filename=protocol)}}">
-        <div class='container text-right'>
-            <h3>Continue</h3>
-        </div>
-    </a>
-{% endif %}
-
-<a href="{{url_for('DeleteProtocolConfirm', filename=protocol)}}">
-    <div class='container text-right' style="color:red;">
-        <h3>Delete Protocol</h3>
+    {% endif %}
     </div>
-</a>
+  </div>
+
 
 {% endblock content %}
