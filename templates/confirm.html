@@ -47,6 +47,11 @@
     <li class="nav-item">
       <a class="nav-link" data-toggle="tab" href="#labware">Labware</a>
     </li>
+    {% if history %}
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#description">Saved Description</a>
+        </li>
+    {% endif %}
     {% if modFieldList != [] %}
         <li class="nav-item">
             <a class="nav-link" data-toggle="tab" href="#modfields">Modifiable Fields</a>
@@ -107,6 +112,12 @@
             {% endfor %}
         </div>
     </div>
+    <div class="tab-pane fade" id="description">
+        <h2 class="mt-4">Description</h2>
+        <div class="row mt-4">
+            PLACEHOLDER, UPDATE TO PULL LINES FROM HISTORY TXT FILE
+        </div>
+    </div>
     <div class="tab-pane fade" id="modfields">
         {% if modFieldList != [] %}
         <h2 class="mt-4">Modifiable Fields</h2>
@@ -131,10 +142,9 @@
         <div class="row mt-4">
             <div class="col-4 justify-content-start">
                 <div class="card border-danger mb-3 " style="max-height: 10rem; min-height: 10rem">
-                    <div class="card-header">{{wellmap}}</div>
+                    <div class="card-header">{{wellmap.time}}</div>
                     <div class="card-body">
-                    <h4 class="card-title">{{wellmap}}</h4>
-                    <p class="card-text">{{wellmap}}</p>
+                    <h4 class="card-title">{{wellmap.name}}</h4>
                     </div>
                 </div>
             </div>

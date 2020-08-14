@@ -1,0 +1,141 @@
+{% extends "layout.html" %}
+{% block content %}
+
+
+<div class="row mt-4">
+    <div class="col-12">
+        <h1>Options</h1>
+    </div>
+</div>
+
+<div class="row mt-4">
+        <div class="col-sm-4 justify-content-start">
+            <div data-toggle="modal" data-target="#clearTempFiles" class="card border-danger mb-3" style="max-height: 10rem; min-height: 10rem; color:#3e3f3a; cursor: pointer;">
+                <div class="card-header">Deletes temporary files used for modification.</div>
+                <div class="card-body">
+                <h4 class="card-title">Clear Temporary Files</h4>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4 justify-content-start">
+            <div data-toggle="modal" data-target="#clearHistory" class="card border-danger mb-3" style="max-height: 10rem; min-height: 10rem; color:#3e3f3a; cursor: pointer;">
+                <div class="card-header">Permanently deletes protocol history.</div>
+                <div class="card-body">
+                <h4 class="card-title">Clear History</h4>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4 justify-content-start">
+            <div data-toggle="modal" data-target="#deleteScripts" class="card border-danger mb-3" style="max-height: 10rem; min-height: 10rem; color:#3e3f3a; cursor: pointer;">
+                <div class="card-header">Permanently deletes all protocol scripts.</div>
+                <div class="card-body">
+                <h4 class="card-title">Delete All Protocol Scripts</h4>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4 justify-content-start">
+            <div data-toggle="modal" data-target="#deleteWellMaps"  class="card border-danger mb-3" style="max-height: 10rem; min-height: 10rem; color:#3e3f3a; cursor: pointer;">
+                <div class="card-header">Permanently deletes all well map files.</div>
+                <div class="card-body">
+                <h4 class="card-title">Delete All Well Maps</h4>
+                </div>
+            </div>
+        </div>
+</div>
+
+<div class="modal fade" id="clearTempFiles" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Are you sure?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Clearing temporary files will delete the copies of protocol scripts that are created when modifications are made.</p>
+                <p>Temporary files are automatically deleted regularly, so doing this isn't a big deal.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-lg btn-secondary">Cancel</button>
+                <a href="{{url_for('ClearTempFiles')}}">
+                    <button type="button" class="btn btn-lg btn-danger">Confirm</button>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="clearHistory" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Are you sure?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Confirming will delete all files in the history folder, including archived protocol scripts, well map files, and descriptions.</p>
+                <p>Normal (non-archived) protocol scripts or well map files will not be deleted.</p>
+                <p>Deleting history will make it more difficult to reproduce previously run scripts.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-lg btn-secondary">Cancel</button>
+                <a href="{{url_for('ClearHistory')}}">
+                    <button type="button" class="btn btn-lg btn-danger">Confirm</button>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="deleteScripts" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Are you sure?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Confirming will permanently delete all protocol scripts in the database.</p>
+                <p>Archived protocol scripts (in the History directory) will not be deleted.</p>
+                <p>Only do this if you have a good reason to, like updating all protocol scripts at once.</p>
+                <p>Protocol scripts can be individually deleted on the corresponding preview page. Access protocol preview pages from the "Protocol Scripts" page.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-lg btn-secondary">Cancel</button>
+                <a href="{{url_for('DeleteProtocolScripts')}}">
+                    <button type="button" class="btn btn-lg btn-danger">Confirm</button>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="deleteWellMaps" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Are you sure?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Confirming will permanently delete all well map files in the database.</p>
+                <p>Archived well map files (in the History directory) will not be deleted.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-lg btn-secondary">Cancel</button>
+                <a href="{{url_for('DeleteWellMaps')}}">
+                    <button type="button" class="btn btn-lg btn-danger">Confirm</button>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

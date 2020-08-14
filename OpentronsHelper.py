@@ -1,6 +1,6 @@
 from flask import Flask, render_template, url_for, redirect, send_file, request
-from FileManager import getProtocolList, getWellMapList, makeTempFile, saveHistory, getHistoryList, deleteFile
-from ScriptHandler import findLabware, findPipettes, findMetadata, findModFields, editModFields, wellMapEnabled, editScriptRTPCR, simulateScript, findWellmap, isHistory
+from FileManager import getProtocolList, getWellMapList, makeTempFile, saveHistory, getHistoryList, deleteFile, clearDirectory
+from ScriptHandler import findLabware, findPipettes, findMetadata, findModFields, editModFields, wellMapEnabled, editScriptRTPCR, simulateScript, findWellmap, isHistory, findDescription
 from Forms import modifyForm, historyForm
 from datetime import datetime
 import os
@@ -184,7 +184,33 @@ def ProtocolHistory(filename):
     metadata = findMetadata(folder, filename)
     modFields = findModFields(folder, filename)
     wellmap = findWellmap(folder, filename)
-    return render_template('protocol_history.html', history=filename, labwareList=labware, pipetteList=pipettes, metadataList=metadata, modFieldList=modFields, wellmap=wellmap)
+    simulationLog = simulateScript(folder, filename)
+    description = findDescription(folder, filename)
+    return render_template('confirm.html', protocol=filename, labwareList=labware, pipetteList=pipettes, metadataList = metadata, modFieldList=modFields, history=True, wellmap=wellmap, simulationLog=simulationLog[1], error=simulationLog[0], description=description)
+
+@app.route('/Options')
+def Options():
+    return render_template('options.html')
+
+@app.route('/ClearTempFiles')
+def ClearTempFiles():
+    clearDirectory('TemporaryFiles')
+    return redirect(url_for('Options'))
+
+@app.route('/ClearHistory')
+def ClearHistory():
+    clearDirectory('History')
+    return redirect(url_for('Options'))
+
+@app.route('/DeleteProtocolScripts')
+def DeleteProtocolScripts():
+    clearDirectory('ProtocolFiles')
+    return redirect(url_for('Options'))
+
+@app.route('/DeleteWellMaps')
+def DeleteWellMaps():
+    clearDirectory('WellMaps')
+    return redirect(url_for('Options'))
 
 if __name__== '__main__':
     app.run(debug=True)

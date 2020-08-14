@@ -51,6 +51,12 @@ def makeTempFile(filename):
 def deleteFile(folder, filename):
     os.remove(os.path.join(folder, filename))
 
+# Deletes and recreates given folder
+def clearDirectory(folder):
+    shutil.rmtree(folder)
+    time.sleep(1)
+    os.mkdir(folder)
+
 #-------------------- History Saving --------------------
 
 # Takes filename, description, and directory, writes description to text file in folder
@@ -91,13 +97,14 @@ def saveHistory(filename, email, description):
 
     temp_filename = 'temp_' + filename
     wellmap = findWellmap('TemporaryFiles', temp_filename)
+    wellmap_name = wellmap['name']
     if wellmap != None:
-        shutil.copyfile('WellMaps/{}'.format(wellmap), 'History/{}/{}'.format(title, wellmap))
+        shutil.copyfile('WellMaps/{}'.format(wellmap_name), 'History/{}/{}'.format(title, wellmap_name))
 
     # email to user
     try:
         if email != "":
-            sendEmail(title, email, description, wellmap)
+            sendEmail(title, email, description, wellmap_name)
     except Exception as e:
         print("invalid email")
 

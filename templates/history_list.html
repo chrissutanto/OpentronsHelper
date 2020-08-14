@@ -1,19 +1,33 @@
 {% extends "layout.html" %}
 {% block content %}
-<h1>History</h1>
+<div class="row mt-4">
+    <div class="col">
+        <h1>History</h1>
+    </div>
+</div>
 
-{% if historyList == [] %}
-<div class='container'>
-    <p>No History</p>
-</div>    
-{% endif %}
+<table class="table table-hover mt-4">
+    <thead>
+      <tr>
+        <th scope="col">Script</th>
+        <th scope="col">Date</th>
+        <th scope="col">Time</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for history in historyList %}
+            <tr onclick="location.href='{{url_for('ProtocolHistory', filename=history)}}';" data-toggle="modal" data-target="#exampleModal" style="cursor: pointer;">
+                <th scope="row">{{history[23:]}}</th>
+                <td>{{history[6:9]}} {{history[10:12]}}, {{history[1:5]}}</td>
+                <td>{{history[14:16]}}:{{history[17:19]}}:{{history[20:22]}}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
 
-{% for history in historyList %}
-    <a href="{{url_for('ProtocolHistory', filename=history)}}">
-        <div class='container'>
-            <h3>{{history}}</h3>
-        </div>
-    </a>
-{% endfor %}
-
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <img src="/static/loading.gif" style="width: 60px;" class="center pt-5">
+    </div>
+</div>
 {% endblock content %}

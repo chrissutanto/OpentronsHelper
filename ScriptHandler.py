@@ -1,4 +1,4 @@
-import re, os
+import re, os, time
 from openpyxl import load_workbook
 from subprocess import Popen, PIPE
 
@@ -100,8 +100,9 @@ def findWellmap(folder, filename):
     lines = getLines(folder, filename)
     for line in lines:
         if "# wellmap" in line:
-            wellmap = line[24:-3]
-            return wellmap
+            wellmap = line[24:-2]
+            modtime = time.ctime(os.path.getmtime(os.path.join('WellMaps', wellmap)))
+            return {'name': wellmap, 'time': modtime}
     return []
 
 
