@@ -1,30 +1,76 @@
 {% extends "layout.html" %}
 {% block content %}
-
-<h1>Add Well Map</h1>
-
-<a href="{{url_for('ReturnWellMapTemplate')}}">
-    <div class='container'>
-        <h3>Download Well Map Template</h3>
+<div class="row mt-4">
+    <div class="col">
+        <h1>Add Well Map</h1>
     </div>
-</a>
-
-<div class='container'>
-    <ol>
-        <li>Download the template from the link above and open in a spreadsheet editor.</li>
-        <li>Designate master mix destinations by color. In the image below, liquid will be transferred from master mix tube A1 into all wells in row A of the 96-well plate.</li>
-        <img src='/static/colormatchimage.png'>
-        <li>Designate cDNA sample destinations by name. In the image below, liquid will be transferred from the cDNA sample 8-tube strip into cells 1-3 of the first four columns of the 96-well plate.</li>
-        <img src='/static/valuematchimage.png'>
-        <li>Save and upload spreadsheet below.</li>
-    </ol>
 </div>
 
-<div class='container'>
-    <form action = {{"http://localhost:5000/wellmapuploader/{}".format(filename)}} method = "POST" enctype = "multipart/form-data">
-        <input type='file' name='file' />
-        <input type='submit'/>
-    </form>
-</div>
+<ul class="nav nav-tabs mt-4">
+    <li class="nav-item">
+        <a class="nav-link active" data-toggle="tab" href="#step1">Step 1</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#step2">Step 2</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#step3">Step 3</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#step4">Step 4</a>
+    </li>
+  </ul>
+  <div id="myTabContent" class="tab-content">
+    <div class="tab-pane fade show active" id="step1">
+        <h2 class="mt-4">Download Well Map Template</h2>
+        <button class="btn btn-lg btn-primary mt-2" onclick="location.href='{{url_for('ReturnWellMapTemplate')}}'">Download Template</button>
+        <div class="row mt-4">
+            <div class="col">
+                <p>Click the button to download the well map template.</p>
+                <p>Then, open the file in your spreadsheet editor.</p>
+                <p>Click on the "Step 2" tab to continue to the next step.</p>
+            </div>   
+        </div>
+    </div>
+    <div class="tab-pane fade" id="step2">
+        <div class="tab-pane fade active show" id="2">
+            <h2 class="mt-4">Designate by Color</h2>
+            <div class="row mt-4">
+                <div class="col">
+                    <p>Designate master mix destinations by color.</p>
+                    <p> In the image below, liquid will be transferred from master mix tube A1 into all wells in row A of the 96-well plate.</p>
+                    <img src='/static/colormatchimage.png'>
+                </div>   
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane fade" id="step3">
+        <div class="tab-pane fade active show" id="3">
+            <h2 class="mt-4">Designate by Name</h2>
+            <div class="row mt-4">
+                <div class="col">
+                    <p>Designate cDNA sample destinations by name.</p>
+                    <p> In the image below, liquid will be transferred from the cDNA sample 8-tube strip into cells 1-3 of the first four columns of the 96-well plate.</p>
+                    <img src='/static/valuematchimage.png'>
+                </div>   
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane fade" id="step4">
+        <div class="tab-pane fade active show" id="4">
+            <h2 class="mt-4">Upload Well Map</h2>
+            <div class="row mt-4">
+                <div class="col">
+                    <p>Save the spreadsheet and upload below.</p>
+                </div>   
+                <form action = {{"http://localhost:5000/wellmapuploader/{}".format(filename)}} method = "POST" enctype = "multipart/form-data">
+                    <input type='file' name='file' />
+                    <input type='submit'/>
+                </form>
+            </div>
+        </div>
+    </div>
+  </div>
 
+  
 {% endblock content %}

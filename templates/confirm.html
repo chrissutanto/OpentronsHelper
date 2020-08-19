@@ -20,14 +20,21 @@
                 </button>
             </div>
             <div class="modal-body">
-                <p>Click the "Download File" button to retrieve the file.</p>
+                <p>Click the "download file" button to retrieve the file.</p>
                 <p>Drag and drop the downloaded file into the Opentrons app.</p>
-                <p>Follow the instructions in the app, and click "Save History" when complete.</p>
+                <p>Unless you are using new labware or just changed pipettes, skip calibration by clicking on the "run" tab and click "start run". Otherwise, click on the "calibrate" tab and follow the instructions in the app before proceeding to the "run" tab.</p>
+                <p>Once the protocol script has been run, click "save history" below.</p>
             </div>
             <div class="modal-footer">
-                <a href="{{url_for('ReturnFile', filename=protocol)}}">
-                    <button type="button" class="btn btn-lg btn-primary">Download File</button>
-                </a>
+                {% if history %}
+                    <a href="{{url_for('ReturnFileHistory', filename=protocol)}}">
+                        <button type="button" class="btn btn-lg btn-primary">Download File</button>
+                    </a>
+                {% else %}
+                    <a href="{{url_for('ReturnFile', filename=protocol)}}">
+                        <button type="button" class="btn btn-lg btn-primary">Download File</button>
+                    </a>
+                {% endif %}
                 <a href="{{url_for('SaveHistory', filename=protocol)}}">
                     <button type="button" class="btn btn-lg btn-secondary">Save History</button>
                 </a>
@@ -57,7 +64,7 @@
             <a class="nav-link" data-toggle="tab" href="#modfields">Modifiable Fields</a>
         </li>
     {% endif %}
-    {% if wellmap != [] %}
+    {% if wellmap != {} %}
         <li class="nav-item">
             <a class="nav-link" data-toggle="tab" href="#wellmap">Well Map</a>
         </li>
@@ -85,6 +92,17 @@
     <div class="tab-pane fade" id="pipettes">
         <h2 class="mt-4">Pipettes</h2>
         <div class="row mt-4">
+            <div class="col-sm-4 justify-content-start">
+                <a href="{{url_for('AddPipette', filename=protocol, confirm=True)}}">
+                    <div class="card bg-warning mb-3 text-white" style="max-height: 10rem; min-height: 10rem">
+                        <div class="card-header">A guide to install pipettes.</div>
+                        <div class="card-body">
+                        <h4 class="card-title">Install Pipette</h4>
+                        <p class="card-text">Are any required pipettes not currently installed on the OT-2?</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
             {% for pipette in pipetteList %}
             <div class="col-4 justify-content-start">
                 <div class="card border-warning mb-3 " style="max-height: 10rem; min-height: 10rem">
@@ -100,6 +118,17 @@
     <div class="tab-pane fade" id="labware">
         <h2 class="mt-4">Labware</h2>
         <div class="row mt-4">
+            <div class="col-sm-4 justify-content-start">
+                <a href="{{url_for('CustomLabware', filename=protocol, confirm=True)}}">
+                    <div class="card bg-info mb-3 text-white" style="max-height: 10rem; min-height: 10rem">
+                        <div class="card-header">How to add custom labware?</div>
+                        <div class="card-body">
+                        <h4 class="card-title">Add Custom Labware</h4>
+                        <p class="card-text">Follow the steps here if the protocol uses any custom labware.</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
             {% for labware in labwareList %}
             <div class="col-4 justify-content-start">
                 <div class="card border-info mb-3 " style="max-height: 10rem; min-height: 10rem">
@@ -113,10 +142,18 @@
         </div>
     </div>
     <div class="tab-pane fade" id="description">
+        {% if history %}
         <h2 class="mt-4">Description</h2>
-        <div class="row mt-4">
-            PLACEHOLDER, UPDATE TO PULL LINES FROM HISTORY TXT FILE
+        <div class="d-md-flex">
+            <div class="overflow-auto p-3 mb-3 mb-md-0 mr-md-3 bg-light" style="max-height: 500px; min-width: 100%;">
+                <p style="pre-wrap; line-height: 10px;">
+                    {% for line in description %}
+                        {{line}}<br>
+                    {% endfor %}
+                </p>
+            </div>
         </div>
+        {% endif %}
     </div>
     <div class="tab-pane fade" id="modfields">
         {% if modFieldList != [] %}
@@ -137,7 +174,7 @@
         {% endif %}
     </div>
     <div class="tab-pane fade" id="wellmap">
-        {% if wellmap != [] %}
+        {% if wellmap != {} %}
         <h2 class="mt-4">Well Map</h2>
         <div class="row mt-4">
             <div class="col-4 justify-content-start">

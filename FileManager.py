@@ -1,6 +1,6 @@
 import os, shutil, time
 from datetime import datetime
-from ScriptHandler import findWellmap, findDescription
+from ScriptHandler import findWellmap, findDescription, getLines
 from EmailHandler import sendEmail
 
 # Checks if protocol folder exists, if not creates a folder then returns None. Otherwise, returns list of files
@@ -57,6 +57,11 @@ def clearDirectory(folder):
     time.sleep(1)
     os.mkdir(folder)
 
+def getHistoryDescription(folder):
+    lines = getLines(folder, 'description.txt')
+    lines[0] = lines[0][13:]
+    return lines
+
 #-------------------- History Saving --------------------
 
 # Takes filename, description, and directory, writes description to text file in folder
@@ -97,8 +102,8 @@ def saveHistory(filename, email, description):
 
     temp_filename = 'temp_' + filename
     wellmap = findWellmap('TemporaryFiles', temp_filename)
-    wellmap_name = wellmap['name']
-    if wellmap != None:
+    if wellmap != {}:
+        wellmap_name = wellmap['name']
         shutil.copyfile('WellMaps/{}'.format(wellmap_name), 'History/{}/{}'.format(title, wellmap_name))
 
     # email to user

@@ -1,5 +1,5 @@
 from flask import Flask, render_template, url_for, redirect, send_file, request
-from FileManager import getProtocolList, getWellMapList, makeTempFile, saveHistory, getHistoryList, deleteFile, clearDirectory
+from FileManager import getProtocolList, getWellMapList, makeTempFile, saveHistory, getHistoryList, deleteFile, clearDirectory, getHistoryDescription
 from ScriptHandler import findLabware, findPipettes, findMetadata, findModFields, editModFields, wellMapEnabled, editScriptRTPCR, simulateScript, findWellmap, isHistory, findDescription
 from Forms import modifyForm, historyForm
 from datetime import datetime
@@ -129,7 +129,8 @@ def HistoryConfirm(filename):
     pipettes = findPipettes(folder, filename)
     metadata = findMetadata(folder, filename)
     modFields = findModFields(folder, filename)
-    return render_template('confirm.html', protocol=filename, labwareList=labware, pipetteList=pipettes, metadataList = metadata, modFieldList=modFields, history=True)
+    description = getHistoryDescription(folder)
+    return render_template('confirm.html', protocol=filename, labwareList=labware, pipetteList=pipettes, metadataList = metadata, modFieldList=modFields, history=True, description=description)
 
 @app.route('/Simulate/<filename>')
 def Simulate(filename):
@@ -185,7 +186,7 @@ def ProtocolHistory(filename):
     modFields = findModFields(folder, filename)
     wellmap = findWellmap(folder, filename)
     simulationLog = simulateScript(folder, filename)
-    description = findDescription(folder, filename)
+    description = getHistoryDescription(folder)
     return render_template('confirm.html', protocol=filename, labwareList=labware, pipetteList=pipettes, metadataList = metadata, modFieldList=modFields, history=True, wellmap=wellmap, simulationLog=simulationLog[1], error=simulationLog[0], description=description)
 
 @app.route('/Options')
@@ -211,6 +212,26 @@ def DeleteProtocolScripts():
 def DeleteWellMaps():
     clearDirectory('WellMaps')
     return redirect(url_for('Options'))
+
+@app.route('/CustomLabware/<filename>/<confirm>')
+def CustomLabware(filename, confirm):
+    if confirm == 'False':
+        confirm = False
+    elif confirm == 'True':
+        confirm = True
+    if filename == 'None':
+        filename = None
+    return render_template('custom_labware.html', filename=filename, confirm=confirm)
+
+@app.route('/AddPipette/<filename>/<confirm>')
+def AddPipette(filename, confirm):
+    if confirm == 'False':
+        confirm = False
+    elif confirm == 'True':
+        confirm = True
+    if filename == 'None':
+        filename = None
+    return render_template('add_pipette.html', filename=filename, confirm=confirm)
 
 if __name__== '__main__':
     app.run(debug=True)

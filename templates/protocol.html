@@ -68,6 +68,17 @@
     <div class="tab-pane fade" id="pipettes">
         <h2 class="mt-4">Pipettes</h2>
         <div class="row mt-4">
+            <div class="col-sm-4 justify-content-start">
+                <a href="{{url_for('AddPipette', filename=protocol, confirm=False)}}">
+                    <div class="card bg-warning mb-3 text-white" style="max-height: 10rem; min-height: 10rem">
+                        <div class="card-header">A guide to install pipettes.</div>
+                        <div class="card-body">
+                        <h4 class="card-title">Install Pipette</h4>
+                        <p class="card-text">Are any required pipettes not currently installed on the OT-2?</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
             {% for pipette in pipetteList %}
             <div class="col-sm-4 justify-content-start">
                 <div class="card border-warning mb-3 " style="max-height: 10rem; min-height: 10rem">
@@ -83,6 +94,17 @@
     <div class="tab-pane fade" id="labware">
         <h2 class="mt-4">Labware</h2>
         <div class="row mt-4">
+            <div class="col-sm-4 justify-content-start">
+                <a href="{{url_for('CustomLabware', filename=protocol, confirm=False)}}">
+                    <div class="card bg-info mb-3 text-white" style="max-height: 10rem; min-height: 10rem">
+                        <div class="card-header">A guide to upload custom labware.</div>
+                        <div class="card-body">
+                        <h4 class="card-title">Add Custom Labware</h4>
+                        <p class="card-text">Follow the steps here if the protocol uses any custom labware.</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
             {% for labware in labwareList %}
             <div class="col-sm-4 justify-content-start">
                 <div class="card border-info mb-3 " style="max-height: 10rem; min-height: 10rem">

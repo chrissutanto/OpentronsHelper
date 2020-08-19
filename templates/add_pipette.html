@@ -1,0 +1,142 @@
+{% extends "layout.html" %}
+{% block content %}  
+
+<div class="row mt-4">
+    <div class="col">
+        <h1>Install Pipettes</h1>
+    </div>
+    {% if confirm %}
+    <div class="col-4 justify-content-end d-flex">
+        <button type="button" class="btn btn-lg btn-primary" onclick="location.href='{{url_for('Confirm', filename=filename)}}'">Return to {{filename}}</button>
+    </div>
+    {% elif filename != None %}
+    <div class="col-4 justify-content-end d-flex">
+        <button type="button" class="btn btn-lg btn-primary" onclick="location.href='{{url_for('Protocol', filename=filename)}}'">Return to {{filename}}</button>
+    </div>
+    {% else %}
+    <div class="col-4 justify-content-end d-flex">
+        <button type="button" class="btn btn-lg btn-primary" onclick="location.href='{{url_for('Options')}}'">Return to Options</button>
+    </div>
+    {% endif %}
+</div>
+
+<ul class="nav nav-tabs mt-4">
+    <li class="nav-item">
+        <a class="nav-link active" data-toggle="tab" href="#step1">Step 1</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#step2">Step 2</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#step3">Step 3</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#step4">Step 4</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#step5">Step 5</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#step6">Step 6</a>
+    </li>
+  </ul>
+  <div id="myTabContent" class="tab-content">
+    <div class="tab-pane fade show active" id="step1">
+        <h2 class="mt-4">Navigate to the Pipette Menu</h2>
+        <div class="row mt-4">
+            <div class="col">
+                <p>If you have both a GEN1 pipette and a GEN2 pipette, attach the GEN1 first. Otherwise, space limitations might make it difficult to squeeze into place.</p>
+                <p>In the Opentrons app, navigate to the pipette menu:</p>
+                <ol>
+                    <li>Click on "robot" in the top-right corner of the window.</li>
+                    <li>Select "pipettes & modules" under the name of the connected robot.</li>
+                    <li>Depending on whether a pipette is currently installed in the desired mount, select "change" or "attach".</li>
+                </ol>
+                <img src='/static/pipette1.png' style="width:50%" class="mb-4 ml-4">
+            </div>   
+        </div>
+    </div>
+    <div class="tab-pane fade" id="step2">
+        <div class="tab-pane fade active show" id="2">
+            <h2 class="mt-4">Remove Previously Installed Pipettes</h2>
+            <div class="row mt-4">
+                <div class="col">
+                    <p>If there is a pipette in the desired mount, follow the instructions below. Otherwise, continue to the next step.</p>
+                    <ol>
+                        <li>Unplug the pipette cable.</li>
+                        <img src='/static/pipette2_cable.png' style="max-width:50%; max-height:60%" class="mb-4 ml-4">
+                        <li>Unscrew the three screws.</li>
+                        <img src='/static/pipette2_screw1.png' style="max-width:50%; max-height:60%" class="mb-4 ml-4">
+                        <img src='/static/pipette2_screw2.png' style="max-width:50%; max-height:60%" class="mb-4 ml-4">
+                        <img src='/static/pipette2_screw3.png' style="max-width:50%; max-height:60%" class="mb-4 ml-4">
+                        <li>Remove the pipette.</li>
+                    </ol>
+                </div>   
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane fade" id="step3">
+        <div class="tab-pane fade active show" id="3">
+            <h2 class="mt-4">Align the Pipette to the Mount</h2>
+            <div class="row mt-4">
+                <div class="col">
+                    <p>Start with the pipette behind the mount. Slide the pipette towards you, keeping it vertical. The connector on the pipette should match up with the connector on the mount.</p>
+                    <p>If you have a GEN2 pipette, you'll know it's aligned properly if it feels like the pipette is hanging off a hidden ledge.</p>
+                    <p>Hold the pipette in place for the next step.</p>
+                    <img src='/static/pipette3.png' style="max-width:70%; max-height:60%" class="mb-4 ml-4">
+                </div>   
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane fade" id="step4">
+        <div class="tab-pane fade active show" id="3">
+            <h2 class="mt-4">Loosely Screw the Pipette into the Mount</h2>
+            <div class="row mt-4">
+                <div class="col">
+                    <p>A total of three 2.5 mm hex screws will secure the pipette to its mount. There are two top screws and one bottom screw.</p>
+                    <p>The two top screws are permanently embedded in the transparent plastic at the top of the mount. The single bottom screw needs to be inserted separately. If applicable, take the screw from the removed pipette. Otherwise, screws were included in the box.</p>
+                    <p>Screw in all three screws, but leave them slightly loose.</p>
+                    <img src='/static/pipette2_screw1.png' style="max-width:50%; max-height:60%" class="mb-4 ml-4">
+                    <img src='/static/pipette2_screw2.png' style="max-width:50%; max-height:60%" class="mb-4 ml-4">
+                    <img src='/static/pipette2_screw3.png' style="max-width:50%; max-height:60%" class="mb-4 ml-4">
+                </div>   
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane fade" id="step5">
+        <div class="tab-pane fade active show" id="3">
+            <h2 class="mt-4">Level the Pipette</h2>
+            <div class="row mt-4">
+                <div class="col">
+                    <p>If you're using a single-channel pipette, skip this step. </p>
+                    <p>To level a GEN1 8-channel pipette:</p>
+                    <ol>
+                        <li>Use your hand to gently and slowly pull the pipette all the way down to the OT-2's deck.</li>
+                        <li>Wiggle the pipette so that all 8 of its nozzles touch the deck at the same time.</li>
+                        <li>While holding the pipette down, tighten the 3 screws.</li>
+                    </ol>
+                    <p>To level a GEN2 8-channel pipette, use the leveling block included with the pipette and follow the instructions in the Opentrons app.</p>
+                </div>   
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane fade" id="step6">
+        <div class="tab-pane fade active show" id="3">
+            <h2 class="mt-4">Tighten the Screws and Connect the Cable</h2>
+            <div class="row mt-4">
+                <div class="col">
+                    <p>Tighten the three screws and plug in the ribbon cable.</p>
+                    <img src='/static/pipette2_cable.png' style="max-width:50%; max-height:60%" class="mb-4 ml-4">
+                    <p>Once ready, click "Have robot check connection" to check the installation.</p>
+                    <p>If you see a message saying that the pipette was successfully attached, exit pipette setup in the Opentrons app.</p>
+                    {% if filename != None %}
+                    <p>Select the "return to protocol" button at the top-right corner of this page to return to your protocol script.</p>
+                    {% else %}
+                    <p>Select the "return to options" button at the top-right corner of this page to return to the options page.</p>
+                    {% endif %}
+                </div>   
+            </div>
+        </div>
+    </div>
+  </div>
+{% endblock content %}

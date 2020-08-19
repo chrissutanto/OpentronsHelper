@@ -1,0 +1,78 @@
+{% extends "layout.html" %}
+{% block content %}  
+
+<div class="row mt-4">
+    <div class="col">
+        <h1>Add Custom Labware</h1>
+    </div>
+    {% if confirm %}
+    <div class="col-4 justify-content-end d-flex">
+        <button type="button" class="btn btn-lg btn-primary" onclick="location.href='{{url_for('Confirm', filename=filename)}}'">Return to {{filename}}</button>
+    </div>
+    {% elif filename != None %}
+    <div class="col-4 justify-content-end d-flex">
+        <button type="button" class="btn btn-lg btn-primary" onclick="location.href='{{url_for('Protocol', filename=filename)}}'">Return to {{filename}}</button>
+    </div>
+    {% else %}
+    <div class="col-4 justify-content-end d-flex">
+        <button type="button" class="btn btn-lg btn-primary" onclick="location.href='{{url_for('Options')}}'">Return to Options</button>
+    </div>
+    {% endif %}
+</div>
+
+<ul class="nav nav-tabs mt-4">
+    <li class="nav-item">
+        <a class="nav-link active" data-toggle="tab" href="#step1">Step 1</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#step2">Step 2</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#step3">Step 3</a>
+    </li>
+  </ul>
+  <div id="myTabContent" class="tab-content">
+    <div class="tab-pane fade show active" id="step1">
+        <h2 class="mt-4">Create Custom Labware</h2>
+        <button class="btn btn-lg btn-primary mt-2" onclick="window.open('https://support.opentrons.com/en/articles/3136504-creating-custom-labware-definitions')">Open Guide</button>
+        <div class="row mt-4">
+            <div class="col">
+                <p>Open the guide above to create a custom labware definition or request one from Opentrons.</p>
+                <p>Once you have your custom labware file, click on the "Step 2" tab to continue to the next step.</p>
+            </div>   
+        </div>
+    </div>
+    <div class="tab-pane fade" id="step2">
+        <div class="tab-pane fade active show" id="2">
+            <h2 class="mt-4">Navigate to the Custom Labware Menu</h2>
+            <div class="row mt-4">
+                <div class="col">
+                    <ol>
+                        <li>In the Opentrons app, click on "more" in the bottom-left of the window.</li>
+                        <li>Select "custom labware" in the menu.</li>
+                        <li>Click on the "add labware" button and select your custom labware file.</li>
+                    </ol>
+                    <img src='/static/moremenu.png' style="width:50%" class="mb-4 ml-4">
+                </div>   
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane fade" id="step3">
+        <div class="tab-pane fade active show" id="3">
+            <h2 class="mt-4">Run your Protocol Script</h2>
+            <div class="row mt-4">
+                <div class="col">
+                    <p>If you followed steps 1 and 2, your custom labware definition will be saved directly onto the OT-2. You will be able to use the definition in your protocol scripts without repeating these steps.</p>
+                    <p>Please note that custom labware definitions may cause issues in simulations, but run fine on execution.</p>
+                    {% if filename != None %}
+                    <p>Select the "return to protocol" button to return to your protocol script.</p>
+                    {% else %}
+                    <p>Select the "return to options" button to return to the options page.</p>
+                    {% endif %}
+
+                </div>   
+            </div>
+        </div>
+    </div>
+  </div>
+{% endblock content %}

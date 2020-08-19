@@ -103,7 +103,7 @@ def findWellmap(folder, filename):
             wellmap = line[24:-2]
             modtime = time.ctime(os.path.getmtime(os.path.join('WellMaps', wellmap)))
             return {'name': wellmap, 'time': modtime}
-    return []
+    return {}
 
 
 # Takes list of tuples representing user input, updates script modfields
@@ -153,8 +153,6 @@ def simulateScript(folder, filename):
     out = p.communicate()[0]
     err = p.communicate()[1]
     error = False
-
-    print("simulating: " + folder + "/" + filename)
 
     if p.returncode != 0: 
         error = True
