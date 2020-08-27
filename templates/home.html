@@ -7,11 +7,10 @@
     <hr class="my-4">
     <p>If you just started up the OT-2 or the Opentrons app, click the button below for a connection guide. Otherwise, select an option below.</p>
     <p class="lead">
-      <a class="btn btn-primary btn-lg" href="{{url_for('ProtocolScripts')}}" role="button">Connection Guide</a>
+      <a class="btn btn-primary btn-lg" data-toggle="modal" data-target="#exampleModal" role="button">Connection Guide</a>
     </p>
 </div>
 
-<button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#exampleModal">Just turned on the robot? Click here for a connection guide.</button>
 
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
