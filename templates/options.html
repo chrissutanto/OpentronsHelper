@@ -10,6 +10,16 @@
 
 <div class="row mt-4">
     <div class="col-sm-4 justify-content-start">
+        <a href="{{url_for('ConfigureEmail')}}">
+            <div class="card border-success mb-3" style="max-height: 10rem; min-height: 10rem; color:#3e3f3a; cursor: pointer;">
+                <div class="card-header">First-time setup for email sending.</div>
+                <div class="card-body">
+                <h4 class="card-title">Configure Email</h4>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-sm-4 justify-content-start">
         <a href="{{url_for('AddPipette', filename='None', confirm=False)}}">
             <div class="card border-success mb-3" style="max-height: 10rem; min-height: 10rem; color:#3e3f3a; cursor: pointer;">
                 <div class="card-header">A guide to install pipettes.</div>

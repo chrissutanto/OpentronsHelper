@@ -1,7 +1,7 @@
 from flask import Flask, render_template, url_for, redirect, send_file, request
-from FileManager import getProtocolList, getWellMapList, makeTempFile, saveHistory, getHistoryList, deleteFile, clearDirectory, getHistoryDescription
+from FileManager import getProtocolList, getWellMapList, makeTempFile, saveHistory, getHistoryList, deleteFile, clearDirectory, getHistoryDescription, setupEmail
 from ScriptHandler import findLabware, findPipettes, findMetadata, findModFields, editModFields, wellMapEnabled, editScriptRTPCR, simulateScript, findWellmap, isHistory, findDescription
-from Forms import modifyForm, historyForm
+from Forms import modifyForm, historyForm, emailForm
 from datetime import datetime
 import os
 
@@ -232,6 +232,16 @@ def AddPipette(filename, confirm):
     if filename == 'None':
         filename = None
     return render_template('add_pipette.html', filename=filename, confirm=confirm)
+
+@app.route('/ConfigureEmail', methods=('GET', 'POST'))
+def ConfigureEmail():
+    form = emailForm()
+    if form.validate_on_submit():
+        email = form.email.data
+        password = form.password.data
+        setupEmail(email, password)
+        return redirect(url_for('Options'))
+    return render_template('configure_email.html', form=form)
 
 if __name__== '__main__':
     app.run(debug=True)

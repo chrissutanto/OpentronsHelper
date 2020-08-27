@@ -62,6 +62,13 @@ def getHistoryDescription(folder):
     lines[0] = lines[0][13:]
     return lines
 
+def setupEmail(email, password):
+    credentials = open("EmailCredentials.txt", "w+")
+    credentials.write('{}\n{}'.format(email, password))
+    credentials.close()
+        
+
+
 #-------------------- History Saving --------------------
 
 # Takes filename, description, and directory, writes description to text file in folder

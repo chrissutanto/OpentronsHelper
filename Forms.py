@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, FormField, FieldList, TextAreaField, SubmitField, validators
+from wtforms import StringField, FormField, FieldList, TextAreaField, SubmitField, validators, PasswordField
 import email_validator
 
 class fieldForm(FlaskForm):
@@ -11,4 +11,9 @@ class modifyForm(FlaskForm):
 class historyForm(FlaskForm):
     email = StringField("Email")
     description = TextAreaField("Description")
+    submit = SubmitField('Submit')
+
+class emailForm(FlaskForm):
+    email = StringField("Email")
+    password = PasswordField("Password")
     submit = SubmitField('Submit')

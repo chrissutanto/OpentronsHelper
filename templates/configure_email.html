@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<div class="row mt-4">
+    <div class="col">
+        <h1>Configure Email</h1>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-10">
+        <div class="formwrapper">
+            <form method="POST" action="{{ url_for('ConfigureEmail') }}">
+                {{ form.csrf_token }}
+                <div class="form-group">
+                    <div class="form-field mt-4">
+                        <label for="exampleInputEmail1">Email Address</label>
+                        <input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp" placeholder="Enter email">
+                        {% if form.email.errors %}
+                        <ul class="errors">
+                            {% for error in form.email.errors %}
+                                <li>{{error}}</li>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-field mt-4">
+                        <label for="exampleInputPassword1">Password</label>
+                        <input type="password" class="form-control" id="password" rows="3" name="password" placeholder="Password">
+                        {% if form.password.errors %}
+                        <ul class="errors">
+                            {% for error in form.password.errors %}
+                                <li>{{error}}</li>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+                    </div>
+                </div>
+                <button type="submit" name="submit" class="btn btn-primary mt-4">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
